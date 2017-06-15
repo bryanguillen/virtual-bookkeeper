@@ -1,0 +1,30 @@
+{ 	
+	"username": "jsmith01",
+	"email": "jsmith01@jsmith.com",
+	"password": "cookies"
+}
+
+{
+	"username": "jsmith02",
+	"email": "jsmith02@jsmith.com",
+	"password": "cookies"
+}
+
+{
+	"_id": ObjectId("58ef96d7a1ef2e629502193f"),
+	"username": "jsmith03",
+	"email": "jsmith03@jsmith.com",
+	"password": "cookies"
+}
+
+{
+	"username": "jsmith04",
+	"email": "jsmith04@jsmith.com",
+	"password": "cookies"
+}
+
+{	"_id": ObjectId("58ef96d7a1ef2e6295021942"),
+	"username": "jsmith05",
+	"email": "jsmith05@jsmith.com",
+	"password": "cookies"
+}
