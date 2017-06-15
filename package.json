@@ -1,0 +1,29 @@
+{
+  "name": "virtual-bookkeeper",
+  "version": "1.0.0",
+  "description": "Records of personal finances.",
+  "main": "server.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bryg217/virtual-bookkeeper.git"
+  },
+  "author": "Bryan G",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bryg217/virtual-bookkeeper/issues"
+  },
+  "homepage": "https://github.com/bryg217/virtual-bookkeeper#readme",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
+    "mongoose": "^4.10.6",
+    "morgan": "^1.8.2"
+  },
+  "devDependencies": {
+    "chai": "^4.0.2",
+    "mocha": "^3.4.2"
+  }
+}
