@@ -8,8 +8,6 @@ const financialProfileSchema = mongoose.Schema({
 });
 
 financialProfileSchema.methods.apiRepr = function() {
-	//schema method for returning a json representation
-	//of only the information that is going to be relevant
 	return {
 		user: this.user,
 		totalSaved: this.totalSaved,

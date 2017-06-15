@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const user = mongoose.Schema({ //schema or better yet, known as the structure of model
+const userSchema = mongoose.Schema({ //schema or better yet, known as the structure of model
 	username: {type: String, required: true},
 	email: {type: String, required: true},
 	password: {type: String, required: true}
@@ -15,6 +15,6 @@ userSchema.methods.apiRepr = function() {
 	}
 }
 
-const User = mongoose.model('User', user); //creates the User collection
+const User = mongoose.model('User', userSchema); //creates the User collection
 
 module.exports = { User };
