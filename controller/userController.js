@@ -7,8 +7,7 @@ const userController = {
 	User 
 		.findById(req.params.userId, function (err, user) {
 			if (err) {
-				console.log(err);
-				res.json({ userNotFound: 'User does not exist in system' });
+				return res.status(400).end('Bad Request');
 			}
 			return user
 		})
@@ -17,7 +16,7 @@ const userController = {
 		})
 		.catch(err => {
 			console.log(err);
-			res.status(500).json({ errorMessage: 'Oops! Something went wrong!' });
+			res.status(500).json({ errorMessage: 'Internal Server Error' });
 		})
 	}
 } 
