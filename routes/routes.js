@@ -8,5 +8,6 @@ router.get('/users/:userId', userController.getUser);
 
 //financial profile routes
 router.get('/users/:userId/finances', financialProfileController.getProfile);
+router.post('/users/:userId/finances', financialProfileController.createProfile);
 
 module.exports = { router };
