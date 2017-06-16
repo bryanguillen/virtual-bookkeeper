@@ -1,0 +1,33 @@
+{ 	
+	user:  ObjectId("58ef96d7a1ef2e629502193f"),	
+	monthlyIncome: 10000,
+	expenditures: [
+		{
+			amount: 100,
+			expenseName: "grocery shopping",
+			date: '15/06/2017'
+		},
+		{
+			amount: 20,
+			expenseName: "haircut",
+			date: '15/06/2017'
+		}
+	]
+}
+
+{ 	
+	user:  ObjectId("58ef96d7a1ef2e6295021942"),	
+	monthlyIncome: 5000,
+	expenditures: [
+		{
+			amount: 200,
+			expenseName: "grocery shopping",
+			date: '15/06/2017'
+		},
+		{
+			amount: 40,
+			expenseName: "haircut",
+			date: '15/06/2017'
+		}
+	]
+}
