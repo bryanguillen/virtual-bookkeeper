@@ -1,14 +1,17 @@
 const express = require('express');
 const app = express();
 const { router }  = require('./routes/routes');
+const bodyParser  = require('body-parser');
 const mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
 
 const morgan = require('morgan'); //http logging middleware 
 
-app.use(express.static('public')); //subject to change static files directory
 app.use(morgan('common'));
+app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+app.use(express.static('public')); //subject to change static files directory
 app.use('/', router);
 
 function runServer () {
