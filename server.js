@@ -16,7 +16,7 @@ app.use('/', router);
 
 function runServer () {
 	return new Promise((resolve, reject) => { 
-		mongoose.connect('mongodb://localhost/vb_app_test', err => {
+		mongoose.connect('mongodb://localhost/app-test', err => {
 			if(err) {
 				console.log(err);
 				return reject(err);

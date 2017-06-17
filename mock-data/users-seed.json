@@ -1,0 +1,45 @@
+{ 	
+	"username": "jsmith01",
+	"email": "jsmith01@jsmith.com",
+	"password": "cookies",
+	"totalSaved": 0,
+	"monthlyIncome": 0,
+	"expenditures": []
+}
+
+{ 	
+	"username": "jsmith02",
+	"email": "jsmith02@jsmith.com",
+	"password": "cookies",
+	"totalSaved": 0,
+	"monthlyIncome": 0,
+	"expenditures": []
+}
+
+{
+	"_id": ObjectId("58ef96d7a1ef2e629502193f"),
+	"username": "jsmith03",
+	"email": "jsmith03@jsmith.com",
+	"password": "cookies",
+	"totalSaved": 0,
+	"monthlyIncome": 0,
+	"expenditures": [ ObjectId("59444e9578999c748bf7806d"),  ObjectId("59444e9578999c748bf7806e") ]
+}
+
+{
+	"username": "jsmith04",
+	"email": "jsmith04@jsmith.com",
+	"password": "cookies",
+	"totalSaved": 0,
+	"monthlyIncome": 0,
+	"expenditures": []
+}
+
+{	"_id": ObjectId("58ef96d7a1ef2e6295021942"),
+	"username": "jsmith05",
+	"email": "jsmith05@jsmith.com",
+	"password": "cookies",
+	"totalSaved": 0,
+	"monthlyIncome": 0,
+	"expenditures": [ ObjectId("59444e9578999c748bf7806c")]
+}

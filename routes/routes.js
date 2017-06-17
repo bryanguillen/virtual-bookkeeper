@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const { userController } = require('../controller/userController');
-const { financialProfileController } = require('../controller/userFinancesController');
+const { expenditureController } = require('../controller/expenditureController');
 
 //user routes
 router.get('/users/:userId', userController.getUser);
 
-//financial profile routes
-router.get('/users/:userId/finances', financialProfileController.getProfile);
-router.post('/users/:userId/finances', financialProfileController.createProfile);
+//expenditure routes
+router.get('/users/:userId/expenditures/:expenditureId', expenditureController.getExpenditure);
+router.post('/users/:userId/expenditures', expenditureController.createExpenditure);
 
 module.exports = { router };

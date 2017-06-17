@@ -1,0 +1,18 @@
+{
+	"user": ObjectId("58ef96d7a1ef2e629502193f"),
+	"amount": 100, 
+	"expenseName": "grocery shopping"
+}
+
+{
+	"user": ObjectId("58ef96d7a1ef2e629502193f"),
+	"amount": 20, 
+	"expenseName": "haircut"
+}
+
+{
+	"user": ObjectId("58ef96d7a1ef2e6295021942"),
+	"amount": 200, 
+	"expenseName": "grocery shopping"
+}
+
