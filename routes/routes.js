@@ -5,6 +5,7 @@ const { expenditureController } = require('../controller/expenditureController')
 
 //user routes
 router.get('/users/:userId', userController.getUser);
+router.put('/users/:userId/finances', userController.updateProfile);
 
 //expenditure routes
 router.get('/users/:userId/expenditures/:expenditureId', expenditureController.getExpenditure);
