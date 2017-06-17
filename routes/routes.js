@@ -9,5 +9,6 @@ router.get('/users/:userId', userController.getUser);
 //expenditure routes
 router.get('/users/:userId/expenditures/:expenditureId', expenditureController.getExpenditure);
 router.post('/users/:userId/expenditures', expenditureController.createExpenditure);
+router.put('/users/:userId/expenditures/:expenditureId', expenditureController.updateExpenditure);
 
 module.exports = { router };

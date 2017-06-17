@@ -36,6 +36,31 @@ const expenditureController =  {
 					res.status(201).json(expenditure.apiRepr());
 				})
 		})
+	},
+
+	updateExpenditure: function (req, res) {
+		let updatedFields = {};
+		
+		if (!req.body.user || !req.body.id) {
+			res.status(500).json({ errorMessage: 'Oops, you are missing the user id' });
+		}
+
+		//one thing to make sure is that if the type of input is supposed to be int, 
+		//then test for that.. but do that later. 
+		Object.keys(req.body).forEach(function (field) {
+			if (field !== 'user') {
+				updatedFields[field] = req.body[field];
+			}
+		})
+
+		Expenditure 
+			.findByIdAndUpdate(req.body.id, { $set: updatedFields }, function (err) {
+				if (err) {
+					res.status(500).json({ errorMessage: 'Internal Server Error' });
+				}
+
+				res.status(201).end();
+			})
 	}
 }
 
