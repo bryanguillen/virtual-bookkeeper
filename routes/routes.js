@@ -10,5 +10,6 @@ router.get('/users/:userId', userController.getUser);
 router.get('/users/:userId/expenditures/:expenditureId', expenditureController.getExpenditure);
 router.post('/users/:userId/expenditures', expenditureController.createExpenditure);
 router.put('/users/:userId/expenditures/:expenditureId', expenditureController.updateExpenditure);
+router.delete('/users/:userId/expenditures/:expenditureId', expenditureController.deleteExpenditure);
 
 module.exports = { router };

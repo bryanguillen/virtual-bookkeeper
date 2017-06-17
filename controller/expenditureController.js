@@ -1,6 +1,11 @@
 const { Expenditure } = require('../model/expenditureModel');
 const { User } = require('../model/userModel');
 
+//some things to note. 
+//What happens when the expenditure does not exists?
+//what happens when you try to submit false information?
+//what happens 
+
 const expenditureController =  {
 	getExpenditure: function (req, res) {
 		Expenditure
@@ -60,6 +65,32 @@ const expenditureController =  {
 				}
 
 				res.status(201).end();
+			})
+	},
+
+	deleteExpenditure: function (req, res) {
+		//find out which one you want to delete. 
+		// how are we going to know? Well first we have to find it. 
+		Expenditure 
+			.findByIdAndRemove(req.body.id, function (err) {
+				if (err) {
+					res.status(500).json({ errorMessage: 'Internal Server Error' });
+				}
+			})
+			.then(() => {
+				User
+					.findByIdAndUpdate(req.body.user, { $pull: {  'expenditures': req.body.id } }, function (err) {
+						if (err) {
+							res.status(500).json({ errorMessage: 'Internal Server Error' });
+						}
+
+						res.status(201).end();
+					})
+			})
+			.catch(err => {
+				if (err) {
+					res.status(500).json({ errorMessage: 'Internal Server Error' });
+				}
 			})
 	}
 }
