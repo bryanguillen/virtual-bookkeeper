@@ -4,7 +4,7 @@ const { userController } = require('../controller/userController');
 const { expenditureController } = require('../controller/expenditureController');
 
 //user routes
-router.get('/users/:userId', userController.getUser);
+router.get('/users/:userId', userController.getProfile);
 router.put('/users/:userId/finances', userController.updateProfile);
 
 //expenditure routes
