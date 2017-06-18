@@ -1,30 +1,41 @@
 const { Expenditure } = require('../model/expenditureModel');
 const { User } = require('../model/userModel');
 
-//some things to note. 
 //What happens when the expenditure does not exists?
 //what happens when you try to submit false information?
-//what happens 
 
 const expenditureController =  {
 	getExpenditure: function (req, res) {
 		Expenditure
 			.findById(req.params.expenditureId, function (err, expenditure) { //this is using params for now	
 				if (err) {
-					res.status(500).json({ errorMessage: 'Internl Server Error' });
+					res.status(500).json({ errorMessage: 'Internal Server Error' });
 				}
-				res.status(200).json(expenditure.apiRepr());
+				
+				res.status(200).json(expenditure.apiRepr());					
 			})
 	},
 
 	//create expenditure 
 	createExpenditure: function (req, res) {
-		//must take in some new information from the user
-		//then take all of that information and then create it. 
+		let userSubmission = Object.keys(req.body);
+		let requiredKeys = ['user', 'amount', 'expenseName']; //required keys 
+		
+		for (let i=0; i<requiredKeys.length; i++) {
+			let currentKey = requiredKeys[i];
+			if (!userSubmission.includes(currentKey)) { //check if all of the keys are included in req.body
+				res.json({ errorMessage: `You are missing ${requiredKeys[i]}` });
+			}
+		}
+
+		if (typeof req.body.expenseName !== 'string' || typeof req.body.amount !== 'number' ) {
+			res.status(400).json({ errorMessage: 'Make sure you submit right data types for input!' });
+		}
+
 		let newExpenditure = new Expenditure ({
 			'user': req.body.user,
 			'amount': req.body.amount,
-			'expenseName': req.body.expenseName
+			'expenseName': req.body.expenseName.trim() //remove white space //^^NEWLY ADDED!
 		})
 
 		//so after we have that new guy ... we just need to take him and save him. 
@@ -38,6 +49,7 @@ const expenditureController =  {
 					if (err) {
 						res.status(500).json({ errorMessage: 'Internal Server Error' });
 					}
+
 					res.status(201).json(expenditure.apiRepr());
 				})
 		})
@@ -46,15 +58,24 @@ const expenditureController =  {
 	updateExpenditure: function (req, res) {
 		let updatedFields = {};
 		
-		if (!req.body.user || !req.body.id) {
-			res.status(500).json({ errorMessage: 'Oops, you are missing the user id' });
+		let typeLookup = { //make sure each type is right
+			'amount': 'number',
+			'expenseName': 'string',
+			'user': 'string',
+			'id': 'string'
 		}
 
-		//one thing to make sure is that if the type of input is supposed to be int, 
-		//then test for that.. but do that later. 
+		if (!req.body.user || !req.body.id) {
+			res.status(400).json({ errorMessage: 'Oops, you are missing the id' });
+		}
+
 		Object.keys(req.body).forEach(function (field) {
 			if (field !== 'user') {
 				updatedFields[field] = req.body[field];
+			}
+
+			if (typeof req.body[field] !== typeLookup[field] ) {
+				res.status(400).json({ errorMessage: `${field} is not the right type` })
 			}
 		})
 
@@ -64,13 +85,11 @@ const expenditureController =  {
 					res.status(500).json({ errorMessage: 'Internal Server Error' });
 				}
 
-				res.status(201).end();
+				res.status(204).end();
 			})
 	},
 
-	deleteExpenditure: function (req, res) {
-		//find out which one you want to delete. 
-		// how are we going to know? Well first we have to find it. 
+	deleteExpenditure: function (req, res) { 
 		Expenditure 
 			.findByIdAndRemove(req.body.id, function (err) {
 				if (err) {
@@ -88,9 +107,7 @@ const expenditureController =  {
 					})
 			})
 			.catch(err => {
-				if (err) {
-					res.status(500).json({ errorMessage: 'Internal Server Error' });
-				}
+				res.status(500).json({ errorMessage: 'Internal Server Error' });
 			})
 	}
 }
