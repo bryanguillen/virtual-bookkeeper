@@ -22,9 +22,9 @@ function runServer () {
 				return reject(err);
 			}
 		})
-		server = app.listen(process.env.PORT || 3000, function() {
+		server = app.listen(process.env.PORT || 3001, function() {
 			//this uri is going to change below to a parameter instead
-			console.log(`Your application is listening on port 3000 and db uri vb_app_test`); 
+			console.log(`Your application is listening on port 3001 and db uri vb_app_test`); 
 			resolve();
 		})
 		.on('error', err => {
