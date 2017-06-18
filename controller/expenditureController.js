@@ -27,10 +27,6 @@ const expenditureController =  {
 			}
 		}
 
-		if (typeof req.body.expenseName !== 'string' || typeof req.body.amount !== 'number' ) {
-			res.status(400).json({ errorMessage: 'Make sure you submit right data types for input!' });
-		}
-
 		let newExpenditure = new Expenditure ({
 			'user': req.body.user,
 			'amount': req.body.amount,
@@ -62,7 +58,7 @@ const expenditureController =  {
 		}
 
 		Object.keys(req.body).forEach(function (field) {
-			if (field !== 'user') {
+			if (field !== 'user' || field !== 'id') {
 				updatedFields[field] = req.body[field];
 			}
 		})
