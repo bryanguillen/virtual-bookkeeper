@@ -16,7 +16,6 @@ const expenditureController =  {
 			})
 	},
 
-	//create expenditure 
 	createExpenditure: function (req, res) {
 		let userSubmission = Object.keys(req.body);
 		let requiredKeys = ['user', 'amount', 'expenseName']; //required keys 
@@ -58,13 +57,6 @@ const expenditureController =  {
 	updateExpenditure: function (req, res) {
 		let updatedFields = {};
 		
-		let typeLookup = { //make sure each type is right
-			'amount': 'number',
-			'expenseName': 'string',
-			'user': 'string',
-			'id': 'string'
-		}
-
 		if (!req.body.user || !req.body.id) {
 			res.status(400).json({ errorMessage: 'Oops, you are missing the id' });
 		}
@@ -72,10 +64,6 @@ const expenditureController =  {
 		Object.keys(req.body).forEach(function (field) {
 			if (field !== 'user') {
 				updatedFields[field] = req.body[field];
-			}
-
-			if (typeof req.body[field] !== typeLookup[field] ) {
-				res.status(400).json({ errorMessage: `${field} is not the right type` })
 			}
 		})
 
