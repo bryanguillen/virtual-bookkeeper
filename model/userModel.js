@@ -9,11 +9,12 @@ const userProfileSchema = mongoose.Schema({ //schema or better yet, known as the
 	expenditures: [{type: mongoose.Schema.Types.ObjectId, ref: 'Expenditure'}]
 });
 
-userProfileSchema.methods.profileAPIRepr = function(formattedDocs) {
+userProfileSchema.methods.profileAPIRepr = function(formattedDocs, totalExp) { //toalExp is the total for the month
 	return {
 		username: this.username,
 		totalSaved: this.totalSaved,
 		monthlyIncome: this.monthlyIncome,
+		monthlySpend: totalExp,
 		expenditures: formattedDocs
 	}
 }
