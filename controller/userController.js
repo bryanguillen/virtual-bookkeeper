@@ -25,6 +25,7 @@ const userController = {
 							$lt: new Date(endMonth) 
 						} 
 					};
+		let _totalExp = 0; //variable to use for caculating the total monthly exp
 		Expenditure
 			.find(query, function (err, docs) {
 				if (err) {
@@ -36,11 +37,13 @@ const userController = {
 				let formattedDocs = [];
 				for (let i=0, length=docs.length; i<docs.length; i++) {
 					let currentDoc = docs[i];
+					_totalExp += currentDoc.amount; //totalExp added here
 					formattedDocs.push(currentDoc.expenditureAPIRepr());
 				}
 				return formattedDocs;
 			})
 			.then(formattedDocs => {
+				let totalExp = _totalExp; //taken from the value above
 				User
 					.findById(req.params.userId)
 					.populate('expenditures')
@@ -48,7 +51,7 @@ const userController = {
 						if (err) {
 							res.status(500).json({ errorMessage: 'Inernal Server Error' });
 						}
-						res.status(200).json(profile.profileAPIRepr(formattedDocs));
+						res.status(200).json(profile.profileAPIRepr(formattedDocs, totalExp));
 					})
 			})
 			.catch(err => {
