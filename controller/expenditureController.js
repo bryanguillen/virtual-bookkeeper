@@ -1,9 +1,6 @@
 const { Expenditure } = require('../model/expenditureModel');
 const { User } = require('../model/userModel');
 
-//What happens when the expenditure does not exists?
-//what happens when you try to submit false information?
-
 const expenditureController =  {
 	getExpenditure: function (req, res) {
 		Expenditure
@@ -12,7 +9,7 @@ const expenditureController =  {
 					res.status(500).json({ errorMessage: 'Internal Server Error' });
 				}
 				
-				res.status(200).json(expenditure.apiRepr());					
+				res.status(200).json(expenditure.expenditureAPIRepr());					
 			})
 	},
 
@@ -23,7 +20,7 @@ const expenditureController =  {
 		for (let i=0; i<requiredKeys.length; i++) {
 			let currentKey = requiredKeys[i];
 			if (!userSubmission.includes(currentKey)) { //check if all of the keys are included in req.body
-				res.json({ errorMessage: `You are missing ${requiredKeys[i]}` });
+				res.status(400).json({ errorMessage: `You are missing ${requiredKeys[i]}` });
 			}
 		}
 
@@ -44,8 +41,8 @@ const expenditureController =  {
 					if (err) {
 						res.status(500).json({ errorMessage: 'Internal Server Error' });
 					}
-
-					res.status(201).json(expenditure.apiRepr());
+					console.log(expenditure);
+					res.status(201).json(expenditure.expenditureAPIRepr());
 				})
 		})
 	},
