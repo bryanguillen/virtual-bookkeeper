@@ -10,6 +10,7 @@ const expenditureSchema = mongoose.Schema({
 
 expenditureSchema.methods.expenditureAPIRepr = function() {
 	return {
+		_id: this._id, //newly added
 		user: this.user,
 		amount: this.amount,
 		expenseName: this.expenseName
