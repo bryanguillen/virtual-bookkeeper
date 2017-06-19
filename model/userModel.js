@@ -9,14 +9,12 @@ const userProfileSchema = mongoose.Schema({ //schema or better yet, known as the
 	expenditures: [{type: mongoose.Schema.Types.ObjectId, ref: 'Expenditure'}]
 });
 
-userProfileSchema.methods.apiRepr = function() {
-	//schema method for returning a json representation
-	//of only the information that is going to be relevant
+userProfileSchema.methods.profileAPIRepr = function(formattedDocs) {
 	return {
 		username: this.username,
 		totalSaved: this.totalSaved,
 		monthlyIncome: this.monthlyIncome,
-		expenditures: this.expenditures
+		expenditures: formattedDocs
 	}
 }
 
