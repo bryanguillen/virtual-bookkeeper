@@ -1,0 +1,31 @@
+// User 
+		// 	.findById(req.params.userId, function (err, profile) { //beware using params
+		// 		if (err) {
+		// 			res.status(500).json({ errorMessage: 'Internal Server Error' });
+		// 		}
+		// 		return profile
+		// 	})
+		// 	.then(profile => {
+		// 		res.status(200).json(profile.profileAPIRepr());
+		// 	})
+		// 	.catch(err => {
+		// 		res.status(500).json({ errorMessage: 'Internal Server Error' });
+		// 	})
+		// User 
+		// 	.findById(req.params.userId)
+		// 	.populate('expenditures')
+		// 	.exec(function(err, profile) {
+		// 		if (err) {
+		// 			res.status(500).json({ errorMessage: 'Inernal Server Error' });
+		// 		}
+				
+		// 		return profile;
+		// 	})
+		// 	.then(profile => {//this solution worked!
+		// 		for (let i=0; i<profile.expenditures.length; i++) {
+		// 			if (profile.expenditures[i].dateCreated < new Date ('2017/05/30') && profile.expenditures[i].dateCreated > new Date ('2017/05/01') ) {
+		// 				console.log(profile.expenditures[i])
+		// 			}
+		// 		}
+		// 		res.send('a okay!');
+		// 	})
