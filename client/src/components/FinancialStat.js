@@ -1,4 +1,5 @@
 import React from 'react';
+import './styles/FinancialStat.css';
 
 export default function FinancialStat (props) {
 	return (
