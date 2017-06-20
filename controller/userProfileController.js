@@ -2,7 +2,7 @@ const { User } = require('../model/userModel');
 const { Expenditure } = require('../model/expenditureModel');
 const { userHelper } = require('./helpers/helper'); //keep an eye on the memory leak warning
 
-const userController = {
+const userProfileController = {
 	getProfile: function (req, res) {  
 		let currentTime = new Date(Date.now()),
 			year = currentTime.getFullYear(),
@@ -80,4 +80,4 @@ const userController = {
 	}
 } 
 
-module.exports = { userController };
+module.exports = { userProfileController };
