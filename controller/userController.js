@@ -3,13 +3,12 @@ const { Expenditure } = require('../model/expenditureModel');
 const { userHelper } = require('./helpers/helper'); //keep an eye on the memory leak warning
 
 const userController = {
-	getProfile: function (req, res) { 
-		//temporary way of doing this. 
+	getProfile: function (req, res) {  
 		let currentTime = new Date(Date.now()),
 			year = currentTime.getFullYear(),
 			month = currentTime.getMonth() + 1;
 
-		let lastDay = userHelper.dateLookup(month.toString());
+		let lastDay = userHelper.dateLookup(month.toString(), year);
 
 		if (month < 10) {
 			month = '0' + month;
@@ -25,33 +24,35 @@ const userController = {
 							$lt: new Date(endMonth) 
 						} 
 					};
-		let _totalExp = 0; //variable to use for caculating the total monthly exp
 		Expenditure
 			.find(query, function (err, docs) {
 				if (err) {
-					res.status(500).json({ errorMessage: 'Inernal Server Error' });
+					res.status(500).json({ errorMessage: 'Internal Server Error' });
 				} 
 				return docs;
 			})
 			.then(docs => {
-				let formattedDocs = [];
-				for (let i=0, length=docs.length; i<docs.length; i++) {
+				let docAdditions = {};//obj holding docs with monthly expenses and total
+				//expense for the month will be added to docAdditions
+				let formattedDocs = [],
+				    totalExp = 0; 
+				for (let i=0, length=docs.length; i<length; i++) {
 					let currentDoc = docs[i];
-					_totalExp += currentDoc.amount; //totalExp added here
+					totalExp += currentDoc.amount; 
 					formattedDocs.push(currentDoc.expenditureAPIRepr());
 				}
-				return formattedDocs;
+				docAdditions = { totalExp, formattedDocs };
+				return docAdditions;
 			})
-			.then(formattedDocs => {
-				let totalExp = _totalExp; //taken from the value above
+			.then(docAdditions => {
 				User
 					.findById(req.params.userId)
 					.populate('expenditures')
 					.exec(function (err, profile) {
 						if (err) {
-							res.status(500).json({ errorMessage: 'Inernal Server Error' });
+							res.status(500).json({ errorMessage: 'Internal Server Error' });
 						}
-						res.status(200).json(profile.profileAPIRepr(formattedDocs, totalExp));
+						res.status(200).json(profile.profileAPIRepr(docAdditions.formattedDocs, docAdditions.totalExp));
 					})
 			})
 			.catch(err => {
