@@ -15,7 +15,7 @@ const expenditureController =  {
 
 	createExpenditure: function (req, res) {
 		let userSubmission = Object.keys(req.body);
-		let requiredKeys = ['user', 'amount', 'expenseName']; //required keys 
+		let requiredKeys = ['user', 'amount', 'expenseName']; //required keys for req.body 
 		
 		for (let i=0; i<requiredKeys.length; i++) {
 			let currentKey = requiredKeys[i];
@@ -27,10 +27,9 @@ const expenditureController =  {
 		let newExpenditure = new Expenditure ({
 			'user': req.body.user,
 			'amount': req.body.amount,
-			'expenseName': req.body.expenseName.trim() //remove white space //^^NEWLY ADDED!
+			'expenseName': req.body.expenseName.trim() 
 		})
-
-		//so after we have that new guy ... we just need to take him and save him. 
+ 
 		newExpenditure.save(function (err, expenditure) {
 			if (err) {
 				res.status(500).json({ errorMessage: 'Internal Server Error' });
