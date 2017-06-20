@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const { userController } = require('../controller/userController');
+const { userProfileController } = require('../controller/userProfileController');
 const { expenditureController } = require('../controller/expenditureController');
 
 //user routes
-router.get('/users/:userId', userController.getProfile);
-router.put('/users/:userId/finances', userController.updateProfile);
+router.get('/users/:userId', userProfileController.getProfile);
+router.put('/users/:userId/finances', userProfileController.updateProfile);
 
 //expenditure routes
 router.get('/users/:userId/expenditures/:expenditureId', expenditureController.getExpenditure);
