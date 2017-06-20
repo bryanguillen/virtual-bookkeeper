@@ -1,10 +1,17 @@
 const userHelper = {
-	dateLookup: function (month) {
-		//month is an integer value repr 
-		//the month
+	dateLookup: function (month, year) {
+		
+		//calculate whether current year is a leap year
+		if (month === '2') {
+            if ((year % 4 == 0) && (year % 100 != 0) || year % 400 == 0) {
+            	lookupTable['2'] = 29;
+            }
+            lookupTable['2'] = 28;
+		}
+		
+		//numbers are for the month
 		const lookupTable = {
 			'1': 31,
-			'2': 28,
 			'3': 31,
 			'4': 30,
 			'5': 31,
