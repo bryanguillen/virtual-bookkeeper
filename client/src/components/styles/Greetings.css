@@ -1,0 +1,26 @@
+.greetings-container {
+	text-align: left;
+}
+
+.greeting {
+	font-size: 8vw;
+}
+
+.greeting-descr {
+	font-size: 4vw;
+	text-decoration: underline;
+}
+
+@media screen and (min-width: 768px) {
+	.greetings-container {
+		text-align: center;
+	}
+
+	.greeting {
+		font-size: 5vw;
+	}
+
+	.greeting-descr {
+		font-size: 2vw;
+	}
+}

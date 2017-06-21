@@ -1,0 +1,14 @@
+.stat-descr, .stat-value {
+	font-size: 5vw;
+}
+
+@media screen and (min-width: 768px) {
+	.stats-container {
+		text-align: center;
+		height: 10vh;
+	}
+
+	.stat-descr, .stat-value {
+		font-size: 2vw;
+	}	
+}

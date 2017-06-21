@@ -18,7 +18,20 @@
   font-size: large;
 }
 
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.app-wrapper {
+	padding-top: 25px;
+	padding-left: 10px;
+}
+
+@media screen and (min-width: 768px) {
+	.outer {
+		display: table;
+		height: 100vh;
+		width: 100vw;
+	}
+
+	.inner {
+		display: table-cell;
+		vertical-align: middle;
+	}
 }
