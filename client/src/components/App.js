@@ -10,11 +10,11 @@ class App extends Component {
       <div className="outer">
           <div className="inner">
               <div className="container">
-                  <div className="app-wrapper">
+                <div className="app-wrapper">
                   <Greetings username={'demoUser123'} />
                   <UserStats />  
                   <ExpenseInput />
-              </div>
+                </div>
               </div>
           </div>
       </div>
