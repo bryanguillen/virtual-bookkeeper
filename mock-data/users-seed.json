@@ -4,6 +4,7 @@
 	"password": "cookies",
 	"totalSaved": 0,
 	"monthlyIncome": 0,
+	"goal": 0,
 	"expenditures": []
 }
 
@@ -13,6 +14,7 @@
 	"password": "cookies",
 	"totalSaved": 0,
 	"monthlyIncome": 0,
+	"goal": 0,
 	"expenditures": []
 }
 
@@ -23,6 +25,7 @@
 	"password": "cookies",
 	"totalSaved": 0,
 	"monthlyIncome": 0,
+	"goal": 217,
 	"expenditures": [ ObjectId("59444e9578999c748bf7806d"),  ObjectId("59444e9578999c748bf7806e") ]
 }
 
@@ -32,6 +35,7 @@
 	"password": "cookies",
 	"totalSaved": 0,
 	"monthlyIncome": 0,
+	"goal": 0,
 	"expenditures": []
 }
 
@@ -41,5 +45,6 @@
 	"password": "cookies",
 	"totalSaved": 0,
 	"monthlyIncome": 0,
+	"goal": 0,
 	"expenditures": [ ObjectId("59444e9578999c748bf7806c")]
 }

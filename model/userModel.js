@@ -6,6 +6,7 @@ const userProfileSchema = mongoose.Schema({ //schema or better yet, known as the
 	password: {type: String, required: true},
 	totalSaved: { type: Number, default: 0 },
 	monthlyIncome: { type: Number, default: 0 },
+	monthlyGoal: {type: Number, default: 0},
 	expenditures: [{type: mongoose.Schema.Types.ObjectId, ref: 'Expenditure'}]
 });
 
@@ -20,7 +21,8 @@ userProfileSchema.methods.profileAPIRepr = function(formattedDocs, totalExp) { /
 		totalSaved: this.totalSaved,
 		monthlyIncome: this.monthlyIncome,
 		monthlySpend: totalExp,
-		netIncome, //newly added
+		netIncome, 
+		monthlyGoal: this.monthlyGoal, //newly added
 		expenditures: formattedDocs
 	}
 
