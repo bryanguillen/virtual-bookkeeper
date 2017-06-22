@@ -8,6 +8,13 @@ body {
   font-family: sans-serif;
 }
 
-.axios-test {
-	display: none;
+/**taking off the spinners in number element **/
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance:textfield;
 }
