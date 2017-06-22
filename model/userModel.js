@@ -13,15 +13,12 @@ const userProfileSchema = mongoose.Schema({ //schema or better yet, known as the
 userProfileSchema.methods.profileAPIRepr = function(formattedDocs, totalExp) { //toalExp is the total for the month
 	//all of the keys below contain relevant values for 
 	//a user to see how they are doing on savings this month 
-	//calculate relevant info for profile apiRepr
-	let netIncome = this.monthlyIncome - totalExp; 
-	
+	//calculate relevant info for profile apiRepr 
 	return {
 		username: this.username,
 		totalSaved: this.totalSaved,
 		monthlyIncome: this.monthlyIncome,
 		monthlySpend: totalExp,
-		netIncome, 
 		monthlyGoal: this.monthlyGoal, //newly added
 		expenditures: formattedDocs
 	}
