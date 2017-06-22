@@ -1,16 +1,15 @@
 import React from 'react';
-import FinancialStat from './FinancialStat';
 import axios from 'axios';
+import FinancialStat from './FinancialStat';
+import Greetings from './Greetings';
 import EditUserStats from './EditUserStats';
 import SaveUserStats from './SaveUserStats';
-
-//you are going to need to make this into a stateful comp
-//for getting data from the server... 
 
 export default class UserStats extends React.Component {
 	constructor (props) {
 		super(props);
 		this.state = {
+			username: null,
 			monthlyIncome: null, 
 			monthlySpend: null, 
 			netIncome: null ,
@@ -29,6 +28,7 @@ export default class UserStats extends React.Component {
 			.then(response => {
 				let userData = response.data; //actual data obj 
 				this.setState({
+					username: userData.username,
 					monthlyIncome: userData.monthlyIncome,
 					monthlySpend: userData.monthlySpend,
 					netIncome: userData.netIncome,
@@ -65,44 +65,56 @@ export default class UserStats extends React.Component {
 			})
 			.then(() => {
 				console.log('success!');
+				this.setState( prevState => ({
+					editMode: !prevState.editMode //you might want a way to take the error and display it to user
+				}))
 			})
 			.catch(err => {
 				console.log(err);
 			})
-		this.setState( prevState => ({
-			editMode: !prevState.editMode
-		}))
 	}
 
 	render () {
+		let state = this.state;
+		//calculate dynamic net income and any other value for future references below. 
+		let dynamicStats = { 
+			netIncome: state.monthlyIncome - state.monthlySpend
+		}
 		
+
 		if (this.state.editMode) {
 			return (
-				<div className="row">
-		            <FinancialStat 
-		            description={'Income '} value={this.state.monthlyIncome} 
-		            editing={true} onChange={this.handleStatEdit}
-		            name={'monthlyIncome'}
-		            />
-                    <FinancialStat description={'Expenses '} value={this.state.monthlySpend}/>
-                    <FinancialStat description={'Net Income '} value={this.state.netIncome}/>
-                    <FinancialStat description={'Goal For Month'} value={this.state.monthlyGoal}
-                   	 editing={true} onChange={this.handleStatEdit}
-                   	 name={'monthlyGoal'}
-                     />
-                    <SaveUserStats  onClick={this.saveStats}/>
-			    </div>	
+				<div className="user-stats-wrapper">
+				    <Greetings username={state.username} />
+				    <div className="row">
+		                <FinancialStat 
+		                description={'Income '} value={state.monthlyIncome} 
+		                editing={true} onChange={this.handleStatEdit}
+		                name={'monthlyIncome'}
+		                />
+                        <FinancialStat description={'Expenses '} value={state.monthlySpend}/>
+                        <FinancialStat description={'Net Income '} value={dynamicStats.netIncome}/>
+                        <FinancialStat description={'Goal For Month'} value={state.monthlyGoal}
+                   	    editing={true} onChange={this.handleStatEdit}
+                   	    name={'monthlyGoal'}
+                        />
+                        <SaveUserStats  onClick={this.saveStats}/>
+			        </div>	
+			    </div>
 			);
 		}
 
 		return (
-			<div className="row">
-		        <FinancialStat description={'Income '} value={this.state.monthlyIncome} editing={false}/>
-                <FinancialStat description={'Expenses '} value={this.state.monthlySpend} editing={false}/>
-                <FinancialStat description={'Net Income '} value={this.state.monthlyIncome - this.state.monthlySpend} editing={false}/>
-                <FinancialStat description={'Goal For Month'} value={this.state.monthlyGoal} editing={false}/>
-                <EditUserStats  onClick={this.editStats}/>
-			</div>		
+			<div className="user-stats-wrapper">
+				<Greetings username={state.username} />
+			    <div className="row">
+		            <FinancialStat description={'Income '} value={state.monthlyIncome}/>
+                    <FinancialStat description={'Expenses '} value={state.monthlySpend}/>
+                    <FinancialStat description={'Net Income '} value={dynamicStats.netIncome}/>
+                    <FinancialStat description={'Goal For Month'} value={state.monthlyGoal}/>
+                    <EditUserStats  onClick={this.editStats}/>
+			    </div>		
+			</div>
 		);
 	}
 }  
