@@ -1,5 +1,6 @@
 import React from 'react';
 import './styles/ExpenseInput.css';
+import axios from 'axios'
 
 export default class ExpenseInput extends React.Component {
 	constructor (props) {
@@ -27,11 +28,27 @@ export default class ExpenseInput extends React.Component {
 		// let expenseNameSubmitted = this.state.expenseName;
 		// let amountSubmitted = this.state.amount;
     	// here we take the input and send it to the server.
-    	this.setState({ 
-    		expenseName: '',
-    		amount: 0
-    	})
+    	axios
+    		.post(`/users/58ef96d7a1ef2e629502193f/expenditures`, {
+    			user: '58ef96d7a1ef2e629502193f',
+    			amount: this.state.amount,
+    			expenseName: this.state.expenseName
+    		})
+    		.then(response => {
+    			//so on top of that what you want to do here is
+    			//dynamically change the expenses dynamically here or 
+    			//return something else in the backend. 
+    			this.setState({ 
+    				expenseName: '',
+    				amount: 0
+    			})
+    		})
+    		.catch(err => {
+    			console.log(err.message);
+    		})
 	}
+
+
 
 	render(){
 		return (
@@ -61,7 +78,7 @@ export default class ExpenseInput extends React.Component {
 						<div className="submit-expense-container">
 							<button className="submit-expense" type="submit">Create Expense</button>
 						</div>
-					</form>;					
+					</form>
 				</div>
 			</div>
 		);
