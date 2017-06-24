@@ -8,6 +8,7 @@ const { authenticationController } = require('../controller/authenticationContro
 router.post('/users/new', authenticationController.createNewUser); 
 router.get('/users/:userId', userProfileController.getProfile);
 router.put('/users/:userId/finances', userProfileController.updateProfile);
+router.get('/users/:userId/history', userProfileController.getProfileHistory);
 
 //expenditure routes
 router.get('/users/:userId/expenditures/:expenditureId', expenditureController.getExpenditure);
