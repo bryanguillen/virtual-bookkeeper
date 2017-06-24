@@ -91,14 +91,8 @@ const userProfileController = {
 			.then(user => {
 				//see activeTimeframe comments for docs
 				let timeframe = userHelper.activeTimeframe(user.created_At); 
-				console.log(timeframe);
-				//right here we want to return something like 
-				//userHelper.monthsActive(timeframe)
-				//which returns an array of objects containing months and years
-				//something like May | 2017 
 				let months = userHelper.monthsActive(timeframe);
-				console.log(months);
-				res.status(200).send('cool!');
+				res.status(200).json(months); //newly added
 			})
 			.catch(err => {
 				res.status(500).json({ errorMessage: 'Internal Server Error' });
