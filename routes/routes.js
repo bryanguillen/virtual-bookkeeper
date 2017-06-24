@@ -2,8 +2,10 @@ const express = require('express');
 const router = express.Router();
 const { userProfileController } = require('../controller/userProfileController');
 const { expenditureController } = require('../controller/expenditureController');
+const { authenticationController } = require('../controller/authenticationController');
 
-//user routes
+//user profile routes
+router.post('/users/new', authenticationController.createNewUser); 
 router.get('/users/:userId', userProfileController.getProfile);
 router.put('/users/:userId/finances', userProfileController.updateProfile);
 
