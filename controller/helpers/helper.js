@@ -1,29 +1,32 @@
 const userHelper = {
-	dateLookup: function (month, year) {
+	getQueryDates: function () {
 		
-		//calculate whether current year is a leap year
-		if (month === '2') {
-            if ((year % 4 == 0) && (year % 100 != 0) || year % 400 == 0) {
-            	lookupTable['2'] = 29;
-            }
-            lookupTable['2'] = 28;
+		let currentTime = new Date(Date.now()),
+			year = currentTime.getFullYear(),
+			month = currentTime.getMonth() + 1,
+			nextMonth;
+
+		if (month === 12) {
+			nextMonth = '01';
+			year += 1;
+		} else {
+			nextMonth = month + 1;
+		}
+
+		if (month < 10) {
+			month = '0' + month;
 		}
 		
-		//numbers are for the month
-		const lookupTable = {
-			'1': 31,
-			'3': 31,
-			'4': 30,
-			'5': 31,
-			'6': 30,
-			'7': 31,
-			'8': 31,
-			'9': 30,
-			'10': 31,
-			'11': 30,
-			'12': 31
+		if (nextMonth < 10) {
+			nextMonth = '0' + nextMonth;
 		}
-		return lookupTable[month];
+
+		queryDates = {
+			beginDate: year + '/' + month + '/01',
+			endDate: year + '/' + nextMonth + '/01'
+		} 
+
+		return queryDates;
 	}
 }
 

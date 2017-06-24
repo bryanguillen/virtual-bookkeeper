@@ -4,24 +4,13 @@ const { userHelper } = require('./helpers/helper'); //keep an eye on the memory 
 
 const userProfileController = {
 	getProfile: function (req, res) {  
-		let currentTime = new Date(Date.now()),
-			year = currentTime.getFullYear(),
-			month = currentTime.getMonth() + 1;
-
-		let lastDay = userHelper.dateLookup(month.toString(), year);
-
-		if (month < 10) {
-			month = '0' + month;
-		}
-
-		let beginMonth = year + '/' + month + '/01',
-			endMonth = year + '/' + month + '/' + lastDay;
+		let queryDates = userHelper.getQueryDates();
 
 		let query = { 
 						user: req.params.userId, 
 						dateCreated: { 
-							$gte: new Date(beginMonth), 
-							$lt: new Date(endMonth) 
+							$gte: new Date(queryDates.beginDate), 
+							$lt: new Date(queryDates.endDate) 
 						} 
 					};
 		Expenditure
