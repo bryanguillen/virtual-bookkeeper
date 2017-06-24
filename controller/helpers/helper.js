@@ -86,58 +86,31 @@ const userHelper = {
 		//the user's signup date and the current month
 
 		let activeMonths = [];
+
 		let endYear = timeframe.end.year,
 			endMonth = timeframe.end.month;
-		//might not work
-		let startMonth = timeframe.start.month,
-			startYear = timeframe.start.year;
 		
-		let i=startYear, iTwo=startMonth;
-		while (i <= endYear ) {
-			while (iTwo <= endMonth) {
-				let monthAndYear = {
-					year: iTwo,
-					month: this.monthLookup(i)
-				}
-				activeMonths.unshift(monthAndYear);
+		let month = timeframe.start.month,
+			year = timeframe.start.year;
+		
+		while (true) {
+			let monthAndYear = {
+				year,
+				month: this.monthLookup(month)
+			}
+			activeMonths.unshift(monthAndYear);
+			if (month === endMonth && year === endYear) {
+				return activeMonths;
+			}
 
-				if (iTwo === 12) {
-					iTwo = 1;
-					i += 1;
-				}				
-				iTwo += 1;
+			month += 1;
 
+			if (month === 13) {
+				month = 1;
+				year += 1;
 			}
 		}
-
-		//get the amount of times you want to increment the counter
-
-
-		// while(month !== endMonth+1 && year !== endYr) {
-		// 	//Right here we need to look up the month and 
-		// 	//then get the month acronym. Next, we get the year.
-		// 	//After that, we add those two to an array .  
-
-		// 	month = this.monthLookup(month);
-
-
-		// 	monthAndYear = {
-		// 		year, 
-		// 		month
-		// 	}
-
-		// 	activeMonths.unshift(monthAndYear);
-
-		// 	if (month === 12) {
-		// 		month = 1;
-		// 		year += 1;
-		// 	}
-		// 	else {
-		// 		month  += 1;
-		// 	}
-		// }
-
-		// return {endYr, endMonth, month, year};
+		return false; //debugging purposes
 	}	
 }
 
