@@ -2,13 +2,13 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
 const userSchema = mongoose.Schema({ //schema or better yet, known as the structure of model
-	username: {type: String, required: true},
-	email: {type: String, required: true},
-	password: {type: String, required: true},
+	username: { type: String, required: true },
+	email: { type: String, required: true },
+	password: { type: String, required: true },
 	totalSaved: { type: Number, default: 0 },
 	monthlyIncome: { type: Number, default: 0 },
-	monthlyGoal: {type: Number, default: 0},
-	expenditures: [{type: mongoose.Schema.Types.ObjectId, ref: 'Expenditure'}],
+	monthlyGoal: { type: Number, default: 0 },
+	months: [{type: mongoose.Schema.Types.ObjectId, ref: 'Expenditure'}],
 	created_At: { type: Date, default: Date.now() }
 });
 
