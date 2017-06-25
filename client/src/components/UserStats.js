@@ -7,22 +7,17 @@ import SaveUserStats from './SaveUserStats';
 export default class UserStats extends React.Component {
 	constructor (props) {
 		super(props);
-		this.handleStatEdit = this.handleStatEdit.bind(this);
+		this.handleStatEdit = this.handleStatEdit.bind(this);		
 	}
 
 	handleStatEdit (e) {
 		this.props.onChange(e);
 	}
 
-	saveStats (e) {
-		this.props.onClick(e);
-	}
-
 	render () {
 		let props = this.props;
-		//calculate dynamic net income and any other value for future references below. 
 
-		if (this.props.editMode) {
+		if (props.editMode) {
 			return (
 				<div className="user-stats-wrapper">
 				    <Greetings username={props.username} />
@@ -38,7 +33,7 @@ export default class UserStats extends React.Component {
                    	    editing={true} onChange={this.handleStatEdit}
                    	    name={'monthlyGoal'}
                         />
-                        <SaveUserStats  onClick={this.saveStats}/>
+                        <SaveUserStats  saveOnClick={props.saveOnClick}/>
 			        </div>	
 			    </div>
 			);
@@ -52,7 +47,7 @@ export default class UserStats extends React.Component {
                     <FinancialStat description={'Expenses '} value={props.monthlySpend}/>
                     <FinancialStat description={'Net Income '} value={props.netIncome}/>
                     <FinancialStat description={'Savings Goal'} value={props.monthlyGoal}/>
-                    <EditUserStats  onClick={this.editStats}/>
+                    <EditUserStats  editOnClick={props.editOnClick}/>
 			    </div>		
 			</div>
 		);

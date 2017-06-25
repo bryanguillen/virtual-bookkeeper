@@ -5,7 +5,7 @@ export default function EditUserStats (props) {
 	return (
 		<div className="col-md-3">
 			<div className="edit-stats-link-container">
-				<button className="edit-stats" onClick={props.onClick}>
+				<button className="edit-stats" onClick={props.editOnClick}>
 				    Edit
 				</button>
 			</div>

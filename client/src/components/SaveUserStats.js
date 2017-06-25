@@ -5,7 +5,7 @@ export default function SaveUserStats (props) {
 	return (
 		<div className="col-md-3">
 			<div className="save-stats-container">
-				<button className="save-stats" onClick={props.onClick}>
+				<button className="save-stats" onClick={props.saveOnClick}>
 				    Save
 				</button>
 			</div>
