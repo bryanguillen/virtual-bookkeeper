@@ -2,6 +2,7 @@ import React from 'react';
 import './styles/App.css';
 import UserStats from './UserStats';
 import ExpenseForm from './ExpenseForm';
+import UserHistory from './UserHistory';
 import axios from 'axios';
 
 class App extends React.Component {
@@ -25,7 +26,7 @@ class App extends React.Component {
   componentDidMount() {
     
     axios
-      .get(`/users/58ef96d7a1ef2e629502193f`) //how to get this value dynamically?
+      .get(`/users/594dd4d447f990bb6450622a`) //how to get this value dynamically?
       .then(response => {
         let userData = response.data; //actual data obj 
         this.setState({
@@ -56,7 +57,7 @@ class App extends React.Component {
     e.preventDefault();
     let state = this.state;
     axios
-      .put(`/users/58ef96d7a1ef2e629502193f/finances`, {
+      .put(`/users/594dd4d447f990bb6450622a/finances`, {
         monthlyIncome: state.monthlyIncome,
         monthlySpend: state.monthlySpend,
         netIncome: state.netIncome,
@@ -76,8 +77,8 @@ class App extends React.Component {
   handleSubmit (e) {
     e.preventDefault();
     axios
-      .post(`/users/58ef96d7a1ef2e629502193f/expenditures`, {
-        user: '58ef96d7a1ef2e629502193f',
+      .post(`/users/594dd4d447f990bb6450622a/expenditures`, {
+        user: '594dd4d447f990bb6450622a',
         amount: this.state.amount,
         expenseName: this.state.expenseName
       })
@@ -109,11 +110,13 @@ class App extends React.Component {
                   <UserStats username={state.username} monthlyIncome={state.monthlyIncome}
                   monthlySpend={state.monthlySpend} netIncome={state.monthlyIncome - state.monthlySpend} 
                   monthlyGoal={state.monthlyGoal} onChange={this.handleInputChange} 
-                  onClick={this.saveStats} />  
+                  saveOnClick={this.saveStats} editOnClick={this.editStats}
+                  editMode={state.editMode} />  
                   <ExpenseForm onSubmit={this.handleSubmit} onChange={this.handleInputChange} 
                     amountFieldName={'amount'} amount={this.state.amount} 
                     expenseFieldName={'expenseName'} 
-                    expenseName={this.state.expenseName} />
+                    expenseName={state.expenseName} />
+                  <UserHistory />
                 </div>
               </div>
           </div>
