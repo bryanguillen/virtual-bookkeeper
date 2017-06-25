@@ -21,14 +21,9 @@ export default class UserHistory extends React.Component {
 			.get(`/users/594dd4d447f990bb6450622a/history`)
 			.then(response => {
 				let userData = response.data;
-				let userHistory = [];
-				for (let i=0; i<userData.length; i++) {
-					let month = userData[i].month,
-						year = userData[i].year;
-
-					let monthAndYear = < MonthAndYear month={month} year={year} />
-					userHistory.push(monthAndYear);  
-				} 
+				let userHistory =  userData.map((month, index) => {
+					return <MonthAndYear key={index} month={userData.month} year={userData.year} /> //new piece of code
+				})				
 				this.setState( prevState => ({ 
 					userHistory,
 					clicked: !prevState.clicked
