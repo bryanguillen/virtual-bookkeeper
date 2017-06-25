@@ -71,15 +71,6 @@ const userProfileController = {
 	},
 
 	getProfileHistory: function (req, res) {
-		//here we want to get all of the post 
-		//that the user has made throughout the past months
-		//some things to keep in mind, we need an index for partial loading, 
-		//and a little more. 
-
-		//so we need to know a begin point and end point. that being when the user signed up. 
-		// for the begin and current for everything in between then. 
-		//getHistoryQuery
-
 		User
 			.findById(req.params.userId, function (err, user) {
 				if (err) {

@@ -8,7 +8,7 @@ const userSchema = mongoose.Schema({ //schema or better yet, known as the struct
 	totalSaved: { type: Number, default: 0 },
 	monthlyIncome: { type: Number, default: 0 },
 	monthlyGoal: { type: Number, default: 0 },
-	months: [{type: mongoose.Schema.Types.ObjectId, ref: 'Expenditure'}],
+	expenditures: [{type: mongoose.Schema.Types.ObjectId, ref: 'Expenditure'}],
 	created_At: { type: Date, default: Date.now() }
 });
 
