@@ -103,18 +103,15 @@ const monthlyController = {
 			},
 			month = reqBody.month,
 			year = reqBody.year,
-			decreaseIncome = -Math.abs(newExpenditure.amount),
-			increaseExpenses = newExpenditure.amount;
+			increaseExpenses = newExpenditure.amount,
+			decreaseIncome = -Math.abs(newExpenditure.amount);
 
 		Month 
 			.findOneAndUpdate(
 				{ user, month, year }, 
 				{ 
 					$push:  { expenditures: newExpenditure },
-					$inc: { 
-						expense: increaseExpenses, 
-						netIncome: decreaseIncome 
-					} 
+					$inc: { expenses: increaseExpenses } 
 
 				},
 				{ new: true },
@@ -122,8 +119,16 @@ const monthlyController = {
 					if (err) {
 						console.log(err.message);
 						return res.status(500).json({ errorMessage: 'Internal Server Error' })
-					} 
-					res.status(204).end();
+					}
+					//update the netIncome dynamically
+					month.netIncome = month.income - month.expenses;
+					month.save(function (err, updatedMonth) {
+						if (err) {
+							console.log(err.message);
+							return res.status(500).json({ errorMessage: 'Internal Server Error' })
+						}
+						res.status(204).end();
+					})
 				}
 			)
 
