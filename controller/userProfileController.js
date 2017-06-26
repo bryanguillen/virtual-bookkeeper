@@ -60,27 +60,7 @@ const userProfileController = {
 
 				res.status(204).end();
 			})
-	},
-
-	getProfileHistory: function (req, res) {
-		User
-			.findById(req.params.userId, function (err, user) {
-				if (err) {
-					res.status(500).json({ errorMessage: 'Internal Server Error' });
-				}
-
-				return user;
-			})
-			.then(user => {
-				//see activeTimeframe comments for docs
-				let timeframe = userHelper.activeTimeframe(user.created_At); 
-				let months = userHelper.monthsActive(timeframe);
-				res.status(200).json(months); //newly added
-			})
-			.catch(err => {
-				res.status(500).json({ errorMessage: 'Internal Server Error' });
-			})
-	}
+	} //recently deleted getProfileHistory
 } 
 
 module.exports = { userProfileController };
