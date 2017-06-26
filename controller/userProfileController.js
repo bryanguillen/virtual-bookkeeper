@@ -1,56 +1,48 @@
 const { User } = require('../model/userModel');
-const { Expenditure } = require('../model/expenditureModel');
-const { userHelper } = require('./helpers/helper'); //keep an eye on the memory leak warning
-
-//bryang01 594dd4d447f990bb6450622a id
+const { Month } = require('../model/monthlyModel');
+const { monthlyController } = require('./monthlyController');
+const { controllerHelper } = require('./helpers/helper'); //keep an eye on the memory leak warning
 
 const userProfileController = {
 	getProfile: function (req, res) {  
-		let queryDates = userHelper.getMonthlyQuery();
-
-		let query = { 
-						user: req.params.userId, 
-						dateCreated: { 
-							$gte: new Date(queryDates.beginDate), 
-							$lt: new Date(queryDates.endDate) 
-						} 
-					};
-		Expenditure
-			.find(query, function (err, docs) {
+		User 
+			.findById(req.params.userId)
+			.populate('months')
+			.exec(function (err, user) {
 				if (err) {
-					res.status(500).json({ errorMessage: 'Internal Server Error' });
-				} 
-				return docs;
-			})
-			.then(docs => {
-				let docAdditions = {};//obj holding docs with monthly expenses and total
-				//expense for the month will be added to docAdditions
-				let formattedDocs = [],
-				    totalExp = 0; 
-				for (let i=0, length=docs.length; i<length; i++) {
-					let currentDoc = docs[i];
-					totalExp += currentDoc.amount; 
-					formattedDocs.push(currentDoc.expenditureAPIRepr());
+					return res.status(500).json({ errorMessage: 'Internal Server Error' });
 				}
-				docAdditions = { totalExp, formattedDocs };
-				return docAdditions;
+				return user; 
 			})
-			.then(docAdditions => {
-				User
-					.findById(req.params.userId)
-					.populate('expenditures')
-					.exec(function (err, profile) {
-						if (err) {
-							res.status(500).json({ errorMessage: 'Internal Server Error' });
-						}
-						res.status(200).json(profile.profileAPIRepr(docAdditions.formattedDocs, docAdditions.totalExp));
-					})
+			.then(user => {
+				let months = user.months,
+			 		correctMonth = null, //month to be represented with user.profileAPIRepr() 
+					currentDate = controllerHelper.getCurrentMonth(),
+					year = currentDate.year,
+					month = currentDate.month;
+
+				console.log(year, month); 
+				
+				for (let i=0, length=months.length; i<length; i++) {
+					let idx = months[i],
+						monthAtIdx = idx.month, 
+						yearAtIdx = idx.year;
+
+					if (monthAtIdx === month && yearAtIdx === year) {
+						correctMonth = idx;
+						break;
+					}
+				}
+
+				if (correctMonth === null) {
+					return monthlyController.createMonthlyRecord(req, res);
+				}
+
+				res.status(200).json(user.profileAPIRepr(correctMonth));
 			})
 			.catch(err => {
-				console.log(err);
 				res.status(500).json({ errorMessage: 'Internal Server Error' });
 			})
-
 	},
 
 	updateProfile: function (req, res) {
