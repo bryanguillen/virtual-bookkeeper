@@ -132,6 +132,69 @@ const monthlyController = {
 				}
 			)
 
+	},
+
+	updateExpenditure: function (req, res) {
+		//first we need to find the doc.. then 
+		//we need to update it. By doc, we mean find, 
+		//the main doc, then the expenditure.. 
+		let reqBody = req.body,
+			submittedKeys = Object.keys(reqBody), 
+			updatedFields = {},
+			update = { $set: updatedFields },
+			user = reqBody.user,
+			month = reqBody.month, 
+			year = reqBody.year;
+
+		let requiredKeys = ['user', 'month', 'year'];
+
+		for (let i=0; i<requiredKeys.length; i++) {
+			let currentKey = requiredKeys[i];
+			if (!submittedKeys.includes(currentKey)) {
+				return res.status(400).json({ errorMessage: 'You are missing ' + currentKey })
+			}
+		}
+		
+		submittedKeys.forEach(function (field) {		
+			if (field === 'amount' || field === 'expenseName') {
+				let positionalOperation = 'expenditures.$.' + field ;
+				updatedFields[positionalOperation] = reqBody[field];
+			}
+		})
+		
+		Month
+			.findOneAndUpdate(
+				{ 
+					user, 
+					month, 
+					year, 
+					'expenditures._id': req.params.expenditureId
+				},
+				update, 
+				{ new: true },
+				function (err, month) {
+					if (err) {
+						console.log(err.message);
+						return res.status(500).json({ errorMessage: 'Internal Server Error' })
+					}
+
+					let newTotalExp = 0; //new total expenses after updating expenditure
+					for (let i=0, length=month.expenditures.length; i<length; i++) {
+						let expenditure = month.expenditures[i];
+						newTotalExp += expenditure.amount;
+					} 
+					month.expenses = newTotalExp;
+					month.netIncome = month.income - month.expenses;
+					month.save(function (err, updatedMonth) {
+						if (err) {
+							console.log(err.message);
+							return res.status(500).json({ errorMessage: 'Internal Server Error' });
+						}
+						console.log(updatedMonth);
+						res.status(204).end();						
+					})
+				}
+			) 
 	}
 }
 
