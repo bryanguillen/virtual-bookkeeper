@@ -7,7 +7,7 @@ authenticationController = {
 		}
 		
 		let userSubmission = Object.keys(req.body);
-		let requiredKeys = ['username', 'password', 'email', 'months']; //required keys for req.body 
+		let requiredKeys = ['username', 'password', 'email']; //required keys for req.body 
 
 		for (let i=0; i<requiredKeys.length; i++) {
 			let currentKey = requiredKeys[i];
@@ -47,7 +47,7 @@ authenticationController = {
 						.then(count => {
 				
 							if(count>0) {
-								return res.status(422).json({ errorMessage: 'Internal Server Error' });
+								return res.status(422).json({ errorMessage: 'User Already Exists' });
 							}
 
 							let newUser = new User ({
@@ -59,20 +59,10 @@ authenticationController = {
 							});
 				
 							newUser.save(function(err, user) {
-							if (err) {
-								return res.status(500).json({ errorMessage: 'Internal Server Error' });
-							}
-							User
-	   							.find(user.username, function (err, user) {
-	   								if (err) {
-	   									return res.status(500).json({ errorMessage: 'Internal Server Error' });
-	   								}
-	   								return user
-	   							})
-	   							.then(res.status(201).json(user.signupAPIRepr()))
-	   							.catch(err => {
-	   								res.status(500).json({ errorMessage: 'Internal Server Error' });
-	   							})
+								if (err) {
+									return res.status(500).json({ errorMessage: 'Internal Server Error' });
+								}
+								res.status(201).json(user.profileAPIRepr()); //right here you going to have account created successfully.
 							});
 						})
 			}) 
