@@ -29,49 +29,53 @@ authenticationController = {
 		username = username.trim().toLowerCase();
 		password = password.trim();
 		
-
-		//next check if user exists then create if it does not exist. 
+		//.hasPassword returns a promise so what we have to do here is
+		//have a single then callback that way we do not get the 
+		//error: 'can't set headers after res'.
 		return User
-				.find({ username })
-				.count()
-				.exec(function (err, count) {
-					if (err, count) {
-						console.log(err);
-						res.status(500).json({ errorMessage: 'Internal Server Error' });
-					}
+				.hashPassword(password)
+				.then((hash) => {
+					User
+						.find({ username })
+						.count()
+						.exec(function (err, count) {
+							if (err) {
+								return res.status(500).json({ errorMessage: 'Internal Server Error' });
+							}
+							return count
+						})
+						.then(count => {
+				
+							if(count>0) {
+								return res.status(422).json({ errorMessage: 'Internal Server Error' });
+							}
 
-					if(count>0) {
-						res.status(422).json({ errorMessage: 'User already exists!' });
-					}
-					return User.hashPassword(password);
-				})
-				.then(hash => {
-					let newUser = new User ({
-						email: email,
-						username: username, 
-						password: hash,
-						created_At: created_At,
-						months: []
-					});
-
-					newUser.save(function(err, user) {
-						if (err) {
-							console.log(err);
-							res.status(500).json({ errorMessage: 'Internal Server Error' });
-						}
-						User
-	   	 					.find(user.username)
-	   	 					.then(res.status(201).json(user.signupAPIRepr()))
-	   	 					.catch(err => {
-	   	 						console.log(err);
-	   	 						res.status(500).json({ errorMessage: 'Internal Server Error' });
-	   	 					})
-					});
-				})
-				.catch( err => {
-					console.log(err);
-					res.json({ errorMessage: 'Internal Server Error' });
-				})
+							let newUser = new User ({
+								email: email,
+								username: username, 
+								password: hash,
+								created_At: created_At,
+								months: []
+							});
+				
+							newUser.save(function(err, user) {
+							if (err) {
+								return res.status(500).json({ errorMessage: 'Internal Server Error' });
+							}
+							User
+	   							.find(user.username, function (err, user) {
+	   								if (err) {
+	   									return res.status(500).json({ errorMessage: 'Internal Server Error' });
+	   								}
+	   								return user
+	   							})
+	   							.then(res.status(201).json(user.signupAPIRepr()))
+	   							.catch(err => {
+	   								res.status(500).json({ errorMessage: 'Internal Server Error' });
+	   							})
+							});
+						})
+			}) 
 	}
 }
 
