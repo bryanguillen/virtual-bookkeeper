@@ -6,7 +6,7 @@ const monthlySchema = mongoose.Schema({
 	//and income. On top of that, the user which owns that monthly
 	//db entity. 
 	user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-	month: { type: Number, required: true },
+	month: { type: String, required: true },
 	year: { type: Number, required: true },
 	income: { type: Number, default: 0 },
 	expense: { type: Number, default: 0 },
@@ -18,8 +18,8 @@ const monthlySchema = mongoose.Schema({
 monthlySchema.methods.monthlyAPIRepr = function() { 
 	return {
 		user: this.user, 
-		month: this.month. 
-		year: this.month, 
+		month: this.month,
+		year: this.year, 
 		income: this.income, 
 		expense: this.expense,
 		netIncome: this.netIncome,
