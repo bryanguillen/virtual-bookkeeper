@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+var Float = require('mongoose-float').loadType(mongoose);
 
 const monthlySchema = mongoose.Schema({ 
 	//the information that we need: the month, 
@@ -8,11 +9,11 @@ const monthlySchema = mongoose.Schema({
 	user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 	month: { type: String, required: true },
 	year: { type: Number, required: true },
-	income: { type: Number, default: 0 },
-	expense: { type: Number, default: 0 },
-	netIncome: { type: Number, default: 0 },
+	income: { type: Float, default: 0 },
+	expenses: { type: Float, default: 0 },
+	netIncome: { type: Float, default: 0 },
 	goal: { type: Number, default: 0 },
-	expenditures: [{  expenseName: String, amount: Number }]
+	expenditures: [{ expenseName: String, amount: Number }]
 });
 
 monthlySchema.methods.monthlyAPIRepr = function() { 
@@ -21,7 +22,7 @@ monthlySchema.methods.monthlyAPIRepr = function() {
 		month: this.month,
 		year: this.year, 
 		income: this.income, 
-		expense: this.expense,
+		expenses: this.expenses,
 		netIncome: this.netIncome,
 		goal: this.goal,
 		expenditures: this.expenditures
