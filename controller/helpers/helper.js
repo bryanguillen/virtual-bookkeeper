@@ -1,4 +1,4 @@
-const userHelper = {
+const controllerHelper = {
 	monthLookup: function (month) {
 		let monthNum = month.toString();
 
@@ -19,31 +19,16 @@ const userHelper = {
 		return months[monthNum];
 	},
 
-	getMonthlyQuery: function () {
+	getCurrentMonth: function () {
 		
 		let currentDate = new Date(Date.now()),
 			year = currentDate.getFullYear(),
-			month = currentDate.getMonth() + 1,
-			nextMonth;
-
-		if (month === 12) {
-			nextMonth = '01';
-			year += 1;
-		} else {
-			nextMonth = month + 1;
-		}
-
-		if (month < 10) {
-			month = '0' + month;
-		}
+			month = currentDate.getMonth() + 1;
 		
-		if (nextMonth < 10) {
-			nextMonth = '0' + nextMonth;
-		}
+		month = this.monthLookup(month);
 
 		queryDates = {
-			beginDate: year + '/' + month + '/01',
-			endDate: year + '/' + nextMonth + '/01'
+			month, year
 		} 
 
 		return queryDates;
@@ -114,4 +99,4 @@ const userHelper = {
 	}	
 }
 
-module.exports = { userHelper };
+module.exports = { controllerHelper };
