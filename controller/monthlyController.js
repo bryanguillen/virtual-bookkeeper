@@ -2,6 +2,8 @@ const { Month } = require('../model/monthlyModel');
 const { User } = require('../model/userModel');
 const { controllerHelper } = require('./helpers/helper');
 
+//HOW TO TEST FOR A USER THAT DOES NOT EXIST? and also, type checking
+
 const monthlyController = {
 	getMonthlyRecord: function (req, res) {
 		let reqParams = req.params,
@@ -40,8 +42,6 @@ const monthlyController = {
 		if ( typeof year !== 'number' || typeof month !== 'string' ) {
 			return res.status(400).json({ errorMessage: 'Bad request!' });
 		}
-
-		//add for a user params that does not exists when possible
 
 		//first protect against another month submission for the same user and then save that month and return it
 		Month
@@ -82,6 +82,51 @@ const monthlyController = {
 						)
 				})
 			})
+	},
+
+	addNewExpenditure: function (req, res) { 
+		let requiredKeys = ['user', 'expenseName', 'amount', 'month', 'year'],
+			reqBody = req.body,
+			submittedKeys = Object.keys(reqBody);
+
+		for (let i=0; i<requiredKeys.length; i++) {
+			let currentKey = requiredKeys[i];
+			if (!submittedKeys.includes(currentKey)) {
+				return res.status(400).json({ errorMessage: 'You are missing ' + currentKey });
+			}
+		}
+
+		let user = reqBody.user, 
+			newExpenditure = {
+				expenseName: reqBody.expenseName,
+				amount: reqBody.amount
+			},
+			month = reqBody.month,
+			year = reqBody.year,
+			decreaseIncome = -Math.abs(newExpenditure.amount),
+			increaseExpenses = newExpenditure.amount;
+
+		Month 
+			.findOneAndUpdate(
+				{ user, month, year }, 
+				{ 
+					$push:  { expenditures: newExpenditure },
+					$inc: { 
+						expense: increaseExpenses, 
+						netIncome: decreaseIncome 
+					} 
+
+				},
+				{ new: true },
+				function (err, month) {
+					if (err) {
+						console.log(err.message);
+						return res.status(500).json({ errorMessage: 'Internal Server Error' })
+					} 
+					res.status(204).end();
+				}
+			)
+
 	}
 }
 
