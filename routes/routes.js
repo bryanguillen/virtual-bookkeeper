@@ -14,5 +14,6 @@ router.put('/users/:userId/finances', userProfileController.updateProfile);
 //monthly endpoints
 router.get('/users/:userId/:month/:year', monthlyController.getMonthlyRecord);
 router.post('/users/:userId/new-month', monthlyController.createMonthlyRecord);
+router.put('/users/:userId/:month/:year/new-expenditure', monthlyController.addNewExpenditure);
 
 module.exports = { router };
