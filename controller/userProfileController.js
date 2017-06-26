@@ -19,9 +19,7 @@ const userProfileController = {
 			 		correctMonth = null, //month to be represented with user.profileAPIRepr() 
 					currentDate = controllerHelper.getCurrentMonth(),
 					year = currentDate.year,
-					month = currentDate.month;
-
-				console.log(year, month); 
+					month = currentDate.month; 
 				
 				for (let i=0, length=months.length; i<length; i++) {
 					let idx = months[i],
