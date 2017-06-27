@@ -3,6 +3,7 @@ import './styles/App.css';
 import UserStats from './UserStats';
 import ExpenseForm from './ExpenseForm';
 import UserHistory from './UserHistory';
+import componentHelper from './helper/helper';
 import axios from 'axios';
 
 export default class UserHome extends React.Component {
@@ -15,7 +16,8 @@ export default class UserHome extends React.Component {
       income: null, 
       goal: false,
       expenses: null,
-      netIncome: null
+      netIncome: null,
+      editMode: false
     }
     this.componentDidMount = this.componentDidMount.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -78,21 +80,24 @@ export default class UserHome extends React.Component {
 
   handleSubmit (e) {
     e.preventDefault();
+    let state = this.state,
+        monthAndYear = componentHelper.getMonth(),
+        amount = parseInt(state.amount, 10); //when submitted amount is turned into string
+    
     axios
-      .post(`/users/594dd4d447f990bb6450622a/expenditures`, {
-        user: '594dd4d447f990bb6450622a',
-        amount: this.state.amount,
-        expenseName: this.state.expenseName
+      .put(`/users/5951691241229d951c308e39/${monthAndYear.month}/${monthAndYear.year}/new-expenditure`, {
+        user: '5951691241229d951c308e39',
+        amount: amount,
+        expenseName: state.expenseName,
+        month: monthAndYear.month,
+        year: monthAndYear.year
       })
-      .then(response => {
-        let userData = response.data;
-        //so on top of that what you want to do here is
-        //dynamically change the expenses dynamically here or 
-        //return something else in the backend. 
+      .then(response => { 
         this.setState( (prevState) => ({ 
           expenseName: '',
           amount: 0,
-          monthlySpend: prevState.monthlySpend + userData.amount
+          expenses: prevState.expenses + amount,
+          netIncome: prevState.netIncome - amount
         }))
       })
       .catch(err => {
