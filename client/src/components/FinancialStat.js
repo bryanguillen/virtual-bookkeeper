@@ -22,6 +22,23 @@ export default function FinancialStat (props) {
             );        
         }
            
+        if (props.edible) {
+            return(
+              <div className="col-md-3">
+                    <div className="stats-container">
+                        <span className="stat-descr">
+                            {props.description}
+                        </span>
+                    </div>
+                    <div className="stats-container">
+                        <span className="stat-value edible">
+                            {props.value}
+                        </span>
+                    </div>
+                </div>
+            );
+        }
+
         return(
             <div className="col-md-3">
                 <div className="stats-container">
@@ -35,5 +52,5 @@ export default function FinancialStat (props) {
                     </span>
                 </div>
             </div>
-        )
+        );
 }

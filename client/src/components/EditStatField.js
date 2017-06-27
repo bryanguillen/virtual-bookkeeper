@@ -5,7 +5,7 @@ export default function EditStatField (props) {
 	return (
 		<div className="edit-stat-field-wrapper">
 			<input 
-			type="number" 
+			type="text" 
 			className="edit-stat-field" 
 			value={props.value}
 			onChange={props.onChange}

@@ -1,0 +1,7 @@
+.expenditure {
+	cursor: pointer;
+}
+
+.expenditure:hover {
+	background: red;
+}

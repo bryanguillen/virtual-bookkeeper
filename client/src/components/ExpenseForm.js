@@ -24,6 +24,7 @@ export default class ExpenseInput extends React.Component {
 							value={this.props.expenseName} 
 							onChange={this.handleChange} 
 							className="expenses-form-input expense-name"
+							placeholder="Haircut"
 							required/>
 						</label>
 						<label className="expense-field">
@@ -34,6 +35,7 @@ export default class ExpenseInput extends React.Component {
 							value={this.props.amount} 
 							onChange={this.handleChange} 
 							className="expenses-form-input amount"
+							placeholder="Format (12.00)"
 							required/>
 						</label>
 						<div className="submit-expense-container">

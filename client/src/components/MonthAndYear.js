@@ -4,7 +4,7 @@ import './styles/MonthAndYear.css';
 export default function MonthAndYear (props) {
 	return (
 		<div className="col-md-4">
-			<span className="month-and-year">
+			<span  data-month={props.dataMonth} data-year={props.dataYear} className="month-and-year" onClick={props.onClick}>
 				{props.month} - {props.year}
 			</span>
 		</div> 

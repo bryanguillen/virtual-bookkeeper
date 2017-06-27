@@ -18,6 +18,24 @@ const componentHelper = {
 		return months[monthNum];
 	},
 
+	fullMonthAcronym: function (month) {
+		let months = {
+			'January': 'jan',
+			'February': 'feb',
+			'March': 'mar',
+			'April': 'apr',
+			'May': 'may',
+			'June': 'jun',
+			'July': 'jul',
+			'August': 'aug',
+			'September': 'sep',
+			'October': 'oct',
+			'November': 'nov',
+			'December': 'dec'	
+		}
+		return months[month];
+	},
+
 	getMonth: function () {
 		let currentDate = new Date(Date.now()),
 			month = this.monthLookup(currentDate.getMonth() + 1),
@@ -28,26 +46,6 @@ const componentHelper = {
 			};
 
 			return currentMonth; //return object with current month
-	},
-
-	convertUserInput: function (input) {
-		let validValues = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
-		if (validValues.includes(input)) {
-			console.log(input.length);
-			if (input.length === 1) {
-				return '0.0' + input
-			}
-
-			if (input.length === 2) {
-				return '0.' + input
-			}
-
-			if (input.legnth > 2) {
-				let firstHalf =  input.slice(0, -3),
-					secondHalf =  input.slice(-2);
-				return firstHalf + '.' + secondHalf;
-			}
- 		}
 	},
 
 	numToStringDollar: function (num) {
@@ -64,7 +62,35 @@ const componentHelper = {
 		return '$' + num.slice(0, -2) + '.' + num.slice(-2);
 	},
 
-	dollarStringToNum: function (numString) {
+	convertOnChange: function (amount) {
+		let charArray = amount.split(''),
+			decimalCount = 0,
+			validChars = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '.'];
+
+		for (let i=0; i<charArray.length; i++) {
+			let char = charArray[i];
+			
+			if (!validChars.includes(char)) { //check for a dollar sign
+				return false;
+			}
+
+			if (char === '.') {
+				decimalCount += 1;
+			}
+		}
+
+		if (decimalCount > 1) {
+			return false 
+		}
+
+		if (decimalCount === 0) {
+			return this.amountStringToNum(amount + '.00');
+		}
+
+		return this.amountStringToNum(amount);
+	},
+
+	amountStringToNum: function (numString) {
 		let numStringChars = numString.split(''),
 			pennyString = '',
 			listNums = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
