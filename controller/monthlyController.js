@@ -84,6 +84,54 @@ const monthlyController = {
 			})
 	},
 
+	updateMonthlyRecord: function (req, res) {
+		let reqBody = req.body,
+			user = reqBody.user, 
+			month = reqBody.month, 
+			year = reqBody.year,
+			updatedFields = {},
+			updateQuery = { $set: updatedFields },
+			mutableFields = ['income', 'goal'],
+			submittedKeys = Object.keys(req.body),
+			dynamicUpdate = false;//dynamic because this tests for a netIncome Update.
+		
+		submittedKeys.forEach(function (field) {
+			if (mutableFields.includes(field)) {
+				updatedFields[field] = req.body[field];
+				if (field === 'income') {
+					dynamicUpdate = true;
+				}
+			}
+		})
+
+		Month 
+			.findOneAndUpdate(
+				{ 
+					user, month, year 
+				},
+				updateQuery,
+				{ new: true },
+				function (err, month) {
+					if (err) {
+						console.log(err.message);
+						return res.status(500).json({ errorMessage: 'Internal Server Error' })
+					}
+
+					if (dynamicUpdate) { 
+						month.netIncome = month.income - month.expenses;
+						month.save(function (err, updatedMonth) {
+							if (err) {
+								console.log(err);
+								return res.status(500).json({ errorMessage: 'Internal Server Error' });
+							}
+							return res.status(204).end();
+						})
+					}
+					res.status(204).end(); //might cause error
+				}
+			)
+	},
+
 	addNewExpenditure: function (req, res) { 
 		let requiredKeys = ['user', 'expenseName', 'amount', 'month', 'year'],
 			reqBody = req.body,
