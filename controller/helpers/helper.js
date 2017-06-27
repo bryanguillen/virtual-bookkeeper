@@ -20,6 +20,24 @@ const controllerHelper = {
 		return months[monthNum];
 	},
 
+	fullMonthLookup: function (month) {
+		months = {
+			'jan': 'January',
+			'feb': 'February',
+			'mar': 'March',
+			'apr': 'April',
+			'may': 'May',
+			'jun': 'June',
+			'jul': 'July',
+			'aug': 'August',
+			'sep': 'September',
+			'oct': 'October',
+			'nov': 'November',
+			'dec': 'December'	
+		}
+		return months[month];
+	},
+
 	getCurrentMonth: function () {
 		
 		let currentDate = new Date(Date.now()),

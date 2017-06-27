@@ -9,6 +9,7 @@ router.post('/users/new', authenticationController.createNewUser);
 
 //user authenticated endpoints
 router.get('/users/:userId', userProfileController.getProfile);
+router.get('/users/:userId/history', userProfileController.getHistory)
 router.put('/users/:userId/finances', userProfileController.updateProfile);
 
 //monthly endpoints

@@ -18,6 +18,7 @@ export default class UserHistory extends React.Component {
 		this.closeUserHistory = this.closeUserHistory.bind(this);
 		this.closeMonth = this.closeMonth.bind(this);
 		this.clickMonth = this.clickMonth.bind(this);
+		this.deleteExpenditure = this.deleteExpenditure.bind(this);
 	}
 
 	getUserHistory (e) {
@@ -71,11 +72,13 @@ export default class UserHistory extends React.Component {
 				let userData = response.data,
 					expenditures = userData.expenditures;
 
-				let monthSummary = expenditures.map(function (expenditure, index) {
+				let monthSummary = expenditures.map((expenditure, index) => {
 					return <Record 
 								key={index}
+								dataYear={year} dataMonth={month} dataId={expenditure._id}
 								expenseName={expenditure.expenseName}
-								amount={expenditure.amount} />
+								amount={expenditure.amount} 
+								deleteOnClick={this.deleteExpenditure}/>
 				})
 
 				this.setState(prevState => ({
@@ -83,6 +86,47 @@ export default class UserHistory extends React.Component {
 					viewMonth: !prevState.viewMonth
 				})) 
 			})
+	}
+
+	deleteExpenditure (e) {
+		e.preventDefault();
+		let event = e.target,
+			id = event.getAttribute('data-id'),
+			year = event.getAttribute('data-year'),
+			month = event.getAttribute('data-month'),
+			state = this.state;
+			axios({
+  				method: 'delete',
+  				url: `/users/5951d945431e898b88e9efd6/${month}/${year}/${id}`,
+				params: {
+    				user: '5951d945431e898b88e9efd6',
+    				month,
+    				year,
+    				expenditureId: id
+
+  				}
+			})
+			.then(() => {
+				let summary = state.monthSummary;
+				for (let i=0; i<summary.length; i++) {
+					let idx = summary[i].props;
+					if (idx.dataId === id) {
+						summary.splice(i, 1);
+						console.log(summary);
+						break;
+					}
+  				}
+				this.setState({ monthSummary: summary })
+			})
+			.catch(err => {
+				console.log(err.message);
+			})
+	}
+
+	editExpenditure (e) {
+		e.preventDefault();
+		//right here we need to just allow the user to edit on click
+
 	}
 
 	render() {

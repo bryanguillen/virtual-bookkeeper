@@ -43,6 +43,30 @@ const userProfileController = {
 			})
 	},
 
+	getHistory: function (req, res) {
+		User
+			.findById(req.params.userId)
+			.populate('months')
+			.exec(function (err, user) {
+				if (err) {
+					console.log(err.message);
+					return res.status(500).json({ errorMessage: 'Internal Server Error' });
+				}
+				return user;
+			})
+			.then(user => {
+				let months = user.months,
+					formattedMonths = [];//formmatted months to give a user to check all history
+				for (let i=0, length=months.length; i<length; i++) {
+					let currentIdx = months[i],
+						month = controllerHelper.fullMonthLookup(currentIdx.month)
+						year = currentIdx.year;
+					formattedMonths.unshift({ month, year }); //sort for more recent months
+				}
+				res.status(200).json(formattedMonths);
+			})
+	},
+
 	updateProfile: function (req, res) {
 		let updatedFields = {};
 
