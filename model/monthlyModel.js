@@ -1,17 +1,13 @@
 const mongoose = require('mongoose');
-var Float = require('mongoose-float').loadType(mongoose);
 
 const monthlySchema = mongoose.Schema({ 
-	//the information that we need: the month, 
-	//year, expenditures, amount saved, total expenses for month 
-	//and income. On top of that, the user which owns that monthly
-	//db entity. 
+	//numbers will be added in pennies.. Avoid rounding errors
 	user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 	month: { type: String, required: true },
 	year: { type: Number, required: true },
-	income: { type: Float, default: 0 },
-	expenses: { type: Float, default: 0 },
-	netIncome: { type: Float, default: 0 },
+	income: { type: Number, default: 0 },
+	expenses: { type: Number, default: 0 },
+	netIncome: { type: Number, default: 0 },
 	goal: { type: Number, default: 0 },
 	expenditures: [{ expenseName: String, amount: Number }]
 });
