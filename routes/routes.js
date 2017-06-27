@@ -16,5 +16,6 @@ router.get('/users/:userId/:month/:year', monthlyController.getMonthlyRecord);
 router.post('/users/:userId/new-month', monthlyController.createMonthlyRecord);
 router.put('/users/:userId/:month/:year/new-expenditure', monthlyController.addNewExpenditure);
 router.put('/users/:userId/:month/:year/:expenditureId', monthlyController.updateExpenditure);
+router.delete('/users/:userId/:month/:year/:expenditureId', monthlyController.deleteExpenditure);
 
 module.exports = { router };
