@@ -3,6 +3,7 @@ import './styles/App.css';
 import UserStats from './UserStats';
 import ExpenseForm from './ExpenseForm';
 import UserHistory from './UserHistory';
+import componentHelper from './helper/helper';
 import axios from 'axios';
 
 export default class UserHome extends React.Component {
@@ -12,9 +13,11 @@ export default class UserHome extends React.Component {
       expenseName: '',
       amount: 0,
       username: null,
-      monthlyIncome: null, 
-      editMode: false,
-      monthlySpend: null
+      income: null, 
+      goal: false,
+      expenses: null,
+      netIncome: null,
+      editMode: false
     }
     this.componentDidMount = this.componentDidMount.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -25,14 +28,16 @@ export default class UserHome extends React.Component {
 
   componentDidMount() {
     axios
-      .get(`/users/594dd4d447f990bb6450622a`) //how to get this value dynamically?
+      .get(`/users/5951691241229d951c308e39`) //how to get this value dynamically?
       .then(response => {
-        let userData = response.data; //actual data obj 
+        let userData = response.data,
+            monthly = userData.month; //actual data obj 
         this.setState({
           username: userData.username,
-          monthlyIncome: userData.monthlyIncome,
-          monthlySpend: userData.monthlySpend,
-          monthlyGoal: userData.monthlyGoal
+          income: monthly.income,
+          expenses: monthly.expenses,
+          goal: monthly.goal,
+          netIncome: monthly.netIncome
         })
       })
       .catch(err => {
@@ -75,21 +80,24 @@ export default class UserHome extends React.Component {
 
   handleSubmit (e) {
     e.preventDefault();
+    let state = this.state,
+        monthAndYear = componentHelper.getMonth(),
+        amount = parseInt(state.amount, 10); //when submitted amount is turned into string
+    
     axios
-      .post(`/users/594dd4d447f990bb6450622a/expenditures`, {
-        user: '594dd4d447f990bb6450622a',
-        amount: this.state.amount,
-        expenseName: this.state.expenseName
+      .put(`/users/5951691241229d951c308e39/${monthAndYear.month}/${monthAndYear.year}/new-expenditure`, {
+        user: '5951691241229d951c308e39',
+        amount: amount,
+        expenseName: state.expenseName,
+        month: monthAndYear.month,
+        year: monthAndYear.year
       })
-      .then(response => {
-        let userData = response.data;
-        //so on top of that what you want to do here is
-        //dynamically change the expenses dynamically here or 
-        //return something else in the backend. 
+      .then(response => { 
         this.setState( (prevState) => ({ 
           expenseName: '',
           amount: 0,
-          monthlySpend: prevState.monthlySpend + userData.amount
+          expenses: prevState.expenses + amount,
+          netIncome: prevState.netIncome - amount
         }))
       })
       .catch(err => {
@@ -106,9 +114,9 @@ export default class UserHome extends React.Component {
           <div className="inner">
               <div className="container">
                 <div className="app-wrapper">
-                  <UserStats username={state.username} monthlyIncome={state.monthlyIncome}
-                  monthlySpend={state.monthlySpend} netIncome={state.monthlyIncome - state.monthlySpend} 
-                  monthlyGoal={state.monthlyGoal} onChange={this.handleInputChange} 
+                  <UserStats username={state.username} monthlyIncome={state.income}
+                  monthlySpend={state.expenses} netIncome={state.netIncome} 
+                  monthlyGoal={state.goal} onChange={this.handleInputChange} 
                   saveOnClick={this.saveStats} editOnClick={this.editStats}
                   editMode={state.editMode} />  
                   <ExpenseForm onSubmit={this.handleSubmit} onChange={this.handleInputChange} 
