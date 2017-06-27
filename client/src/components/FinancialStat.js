@@ -31,7 +31,7 @@ export default function FinancialStat (props) {
                 </div>
                 <div className="stats-container">
                     <span className="stat-value">
-                        ${props.value}
+                        {props.value}
                     </span>
                 </div>
             </div>

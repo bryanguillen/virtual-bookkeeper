@@ -165,7 +165,7 @@ const monthlyController = {
 						console.log(err.message);
 						return res.status(500).json({ errorMessage: 'Internal Server Error' })
 					}
-					//update the netIncome dynamically
+					console.log(month.income);
 					month.netIncome = month.income - month.expenses;
 					month.save(function (err, updatedMonth) {
 						if (err) {

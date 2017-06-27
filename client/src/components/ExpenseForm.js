@@ -30,7 +30,7 @@ export default class ExpenseInput extends React.Component {
 							Expense Amount 
 							<input 
 							name={this.props.amountFieldName} 
-							type="number" 
+							type="text" 
 							value={this.props.amount} 
 							onChange={this.handleChange} 
 							className="expenses-form-input amount"

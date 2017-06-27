@@ -28,17 +28,29 @@ export default class UserHome extends React.Component {
 
   componentDidMount() {
     axios
-      .get(`/users/5951691241229d951c308e39`) //how to get this value dynamically?
+      .get(`/users/5951d945431e898b88e9efd6`) //how to get this value dynamically?
       .then(response => {
+
         let userData = response.data,
-            monthly = userData.month; //actual data obj 
+            financialValues = ['income', 'expenses', 'goal', 'netIncome'],
+            dollarStrings = {};
+
+        Object.keys(userData.month).forEach(function (field) {
+            let monthlyValue = userData.month[field];
+            if (financialValues.includes(field)) {
+              let newVal = componentHelper.numToStringDollar(monthlyValue);
+              dollarStrings[field]= newVal;
+            }
+        })
+
         this.setState({
           username: userData.username,
-          income: monthly.income,
-          expenses: monthly.expenses,
-          goal: monthly.goal,
-          netIncome: monthly.netIncome
+          income: dollarStrings.income,
+          expenses: dollarStrings.expenses,
+          goal: dollarStrings.goal,
+          netIncome: dollarStrings.netIncome
         })
+
       })
       .catch(err => {
         console.log(err);
@@ -46,9 +58,19 @@ export default class UserHome extends React.Component {
   }
 
   handleInputChange (e) {
-    this.setState({
-      [e.target.name]: e.target.value
-    });
+    if (e.target.name === 'amount') {
+      //some how only allow user to enter numbers
+      this.setState({
+        amount: componentHelper.convertUserInput(e.target.value)
+      })
+    }
+    
+    if (e.target.name !== 'amount') {
+      this.setState({
+        [e.target.name]: e.target.value
+      });
+    }
+
   }
 
   editStats(e) {
@@ -82,22 +104,24 @@ export default class UserHome extends React.Component {
     e.preventDefault();
     let state = this.state,
         monthAndYear = componentHelper.getMonth(),
-        amount = parseInt(state.amount, 10); //when submitted amount is turned into string
+        amount = componentHelper.dollarStringToNum(state.amount),
+        expenses = componentHelper.dollarStringToNum(state.expenses),
+        netIncome = componentHelper.dollarStringToNum(state.netIncome);
     
     axios
-      .put(`/users/5951691241229d951c308e39/${monthAndYear.month}/${monthAndYear.year}/new-expenditure`, {
-        user: '5951691241229d951c308e39',
-        amount: amount,
-        expenseName: state.expenseName,
+      .put(`/users/5951d945431e898b88e9efd6/${monthAndYear.month}/${monthAndYear.year}/new-expenditure`, {
+        user: '5951d945431e898b88e9efd6',
         month: monthAndYear.month,
-        year: monthAndYear.year
+        year: monthAndYear.year,
+        amount,
+        expenseName: state.expenseName
       })
-      .then(response => { 
+      .then(() => {
         this.setState( (prevState) => ({ 
           expenseName: '',
           amount: 0,
-          expenses: prevState.expenses + amount,
-          netIncome: prevState.netIncome - amount
+          expenses: componentHelper.numToStringDollar(expenses + amount),
+          netIncome: componentHelper.numToStringDollar(netIncome - amount)
         }))
       })
       .catch(err => {
