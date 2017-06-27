@@ -168,13 +168,12 @@ const monthlyController = {
 					user, 
 					month, 
 					year, 
-					'expenditures._id': req.params.expenditureId
+					'expenditures._id': req.params.expenditureId //Added to find the right embedded doc
 				},
 				update, 
 				{ new: true },
 				function (err, month) {
 					if (err) {
-						console.log(err.message);
 						return res.status(500).json({ errorMessage: 'Internal Server Error' })
 					}
 
@@ -190,11 +189,70 @@ const monthlyController = {
 							console.log(err.message);
 							return res.status(500).json({ errorMessage: 'Internal Server Error' });
 						}
-						console.log(updatedMonth);
 						res.status(204).end();						
 					})
 				}
 			) 
+	},
+
+	deleteExpenditure: function (req, res) {
+		//so first you want to find the right expenditure like you did above, and
+		//then remove that one by using pull.
+		let reqBody = req.body,
+			submittedKeys = Object.keys(reqBody), 
+			deletedExpenditure = {},
+			deleteQuery = { expenditures: deletedExpenditure },
+			user = reqBody.user,
+			month = reqBody.month, 
+			year = reqBody.year,
+			requiredKeys = ['user', 'month', 'year'];
+
+		for (let i=0; i<requiredKeys.length; i++) {
+			let currentKey = requiredKeys[i];
+			if (!submittedKeys.includes(currentKey)) {
+				return res.status(400).json({ errorMessage: 'You are missing ' + currentKey })
+			}
+		}
+
+		//do not need required keys nor the id to delete it. just the expenseName and amount
+		submittedKeys.forEach(function (field) {		
+			if (field === 'amount' || field === 'expenseName') { 
+				deletedExpenditure[field] = reqBody[field];
+			}
+		})
+
+		Month
+			.findOneAndUpdate(
+				{ 
+					user, 
+					month, 
+					year,
+					'expenditures._id': req.params.expenditureId
+				},
+				{ $pull: deleteQuery }, 
+				{ new: true },
+				function (err, month) {
+					if (err) {
+						console.log(err.message);
+						return res.status(500).json({ errorMessage: 'Internal Server Error' })
+					}
+					let newTotalExp = 0; //new total expenses after deleting expenditure
+					for (let i=0, length=month.expenditures.length; i<length; i++) {
+						let expenditure = month.expenditures[i];
+						newTotalExp += expenditure.amount;
+					} 
+					month.expenses = newTotalExp;
+					month.netIncome = month.income - month.expenses;
+					month.save(function (err, updatedMonth) {
+						if (err) {
+							console.log(err.message);
+							return res.status(500).json({ errorMessage: 'Internal Server Error' });
+						}
+						console.log(updatedMonth);
+						res.status(204).end();						
+					})
+				}
+			)
 	}
 }
 
