@@ -29,7 +29,7 @@ const monthlyController = {
 		//create the current month in question for the user in question
 		let currentDate = controllerHelper.getCurrentMonth(),
 			year = currentDate.year,
-			month = currentDate.month.toLowerCase(), 
+			month = currentDate.month, //removed toLowerCase ************* 
 			user = req.params.userId;
 
 		let newMonth = new Month ({
@@ -76,7 +76,6 @@ const monthlyController = {
 								if (err) {
 									return res.status(500).json({ errorMessage: 'Internal Server Error' })
 								}
-
 								res.status(201).json(user.profileAPIRepr(month))
 							}
 						)
@@ -90,7 +89,6 @@ const monthlyController = {
 			month = reqBody.month, 
 			year = reqBody.year,
 			updatedFields = {},
-			updateQuery = { $set: updatedFields },
 			mutableFields = ['income', 'goal'],
 			submittedKeys = Object.keys(req.body),
 			dynamicUpdate = false;//dynamic because this tests for a netIncome Update.
@@ -109,17 +107,15 @@ const monthlyController = {
 				{ 
 					user, month, year 
 				},
-				updateQuery,
+				{ $set: updatedFields },
 				{ new: true },
 				function (err, month) {
 					if (err) {
-						console.log(err.message);
 						return res.status(500).json({ errorMessage: 'Internal Server Error' })
 					}
 
 					if (dynamicUpdate) { 
-						month.netIncome = month.income - month.expenses,
-						month.netIncome; //new
+						month.netIncome = month.income - month.expenses;
 						month.save(function (err, updatedMonth) {
 							if (err) {
 								console.log(err);
@@ -128,7 +124,7 @@ const monthlyController = {
 							return res.status(204).end();
 						})
 					}
-					res.status(204).end(); //might cause error
+					res.status(204).end();
 				}
 			)
 	},
@@ -190,7 +186,6 @@ const monthlyController = {
 		let reqBody = req.body,
 			submittedKeys = Object.keys(reqBody), 
 			updatedFields = {},
-			update = { $set: updatedFields },
 			user = reqBody.user,
 			month = reqBody.month, 
 			year = reqBody.year;
@@ -219,7 +214,7 @@ const monthlyController = {
 					year, 
 					'expenditures._id': req.params.expenditureId //Added to find the right embedded doc
 				},
-				update, 
+				{ $set: updatedFields }, 
 				{ new: true },
 				function (err, month) {
 					if (err) {

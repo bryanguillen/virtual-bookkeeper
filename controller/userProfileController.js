@@ -58,7 +58,7 @@ const userProfileController = {
 
 				res.status(204).end();
 			})
-	} //recently deleted getProfileHistory
+	} 
 } 
 
 module.exports = { userProfileController };
