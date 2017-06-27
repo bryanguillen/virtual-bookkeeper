@@ -118,7 +118,8 @@ const monthlyController = {
 					}
 
 					if (dynamicUpdate) { 
-						month.netIncome = month.income - month.expenses;
+						month.netIncome = month.income - month.expenses,
+						month.netIncome; //new
 						month.save(function (err, updatedMonth) {
 							if (err) {
 								console.log(err);
@@ -147,7 +148,7 @@ const monthlyController = {
 		let user = reqBody.user, 
 			newExpenditure = {
 				expenseName: reqBody.expenseName,
-				amount: reqBody.amount
+				amount: reqBody.amount //newly added
 			},
 			month = reqBody.month,
 			year = reqBody.year,
