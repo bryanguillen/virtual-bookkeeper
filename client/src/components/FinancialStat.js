@@ -5,13 +5,14 @@ import EditStatField from './EditStatField';
 export default function FinancialStat (props) {
         if (props.editing) {
             return (
-                <div className="col-md-3">
-                    <div className="stats-container">
+                <div className="col-md-3 stat-wrapper">
+                <div className="stats-container">
+                    <div className="descr-container">
                         <span className="stat-descr">
                             {props.description}
                         </span>
                     </div>
-                    <div className="stats-container">
+                    <div className="stats-container value-container">
                         <EditStatField 
                         onChange={props.onChange}
                         value={props.value}
@@ -19,38 +20,43 @@ export default function FinancialStat (props) {
                         />
                     </div>
                 </div>
+                </div>
             );        
         }
            
         if (props.edible) {
             return(
-              <div className="col-md-3">
-                    <div className="stats-container">
+              <div className="col-md-3 stat-wrapper">
+                <div className="stats-container">
+                    <div className="descr-container">
                         <span className="stat-descr">
                             {props.description}
                         </span>
                     </div>
-                    <div className="stats-container">
+                    <div className="value-container">
                         <span className="stat-value edible">
                             {props.value}
                         </span>
                     </div>
                 </div>
+            </div>
             );
         }
 
         return(
-            <div className="col-md-3">
-                <div className="stats-container">
+            <div className="col-md-3 stat-wrapper">
+            <div className="stats-container">
+                <div className="descr-container">
                     <span className="stat-descr">
                         {props.description}
                    </span>
                 </div>
-                <div className="stats-container">
+                <div className="value-container">
                     <span className="stat-value">
                         {props.value}
                     </span>
                 </div>
+            </div>
             </div>
         );
 }

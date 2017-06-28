@@ -7,7 +7,7 @@ import axios from 'axios';
 
 export default class UserHistory extends React.Component {
 	constructor (props){
-		super (props);
+		super (props); //lift this state after styling and the rest of wiring
 		this.state = {
 			userHistory: null,
 			clicked: false,
@@ -63,7 +63,7 @@ export default class UserHistory extends React.Component {
 	clickMonth (e) {
 		e.preventDefault();
 		let monthData = e.target.getAttribute('data-month'),
-			month = componentHelper.fullMonthAcronym(monthData),
+			month = componentHelper.fullMonth(monthData, false),
 		 	year = e.target.getAttribute('data-year');
 		
 		axios
@@ -77,7 +77,7 @@ export default class UserHistory extends React.Component {
 								key={index}
 								dataYear={year} dataMonth={month} dataId={expenditure._id}
 								expenseName={expenditure.expenseName}
-								amount={expenditure.amount} 
+								amount={componentHelper.numToStringDollar(expenditure.amount)} 
 								deleteOnClick={this.deleteExpenditure}/>
 				})
 
@@ -134,6 +134,7 @@ export default class UserHistory extends React.Component {
 
 		if (state.viewMonth) {
 			return (
+			<div className="history-container">	
 				<div className="row">
 					<div className="col-md-12">
 						<span className="close-history" onClick={this.closeMonth}>
@@ -142,12 +143,14 @@ export default class UserHistory extends React.Component {
 					</div>
 					{state.monthSummary}
 				</div>
+			</div>
 			);
 		}
 
 
 		if (state.clicked) {
 			return (
+			<div className="history-container">
 				<div className="row">
 					<div className="col-md-12">
 						<span className="close-history" onClick={this.closeUserHistory}>
@@ -156,17 +159,20 @@ export default class UserHistory extends React.Component {
 					</div>
 					{state.userHistory}
 				</div>	
+			</div>
 			);
 		}
 
 		return (
+		<div className="history-container">	
 			<div className="row">
-				<div className="col-md-6">
-					<span className="get-history-link" onClick={this.getUserHistory}>
+				<div className="col-md-12">
+					<span className="get-history" onClick={this.getUserHistory}>
 						See Expenses History
 					</span>
 				</div>
 			</div>
+		</div>
 		);
 	}
 }

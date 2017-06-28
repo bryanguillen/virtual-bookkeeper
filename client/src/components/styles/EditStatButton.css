@@ -1,0 +1,20 @@
+.save-stats-container, .edit-stats-container {
+	text-align: center;
+}
+
+.save-stats, .edit-stats {
+	width: 35%;
+	height: 5vh;
+}
+
+@media screen and (min-width: 970px) {
+	.save-stats-container, .edit-stats-container {
+		text-align: left;
+	}
+
+	.save-stats, .edit-stats {
+		font-size: 1.5vw;
+		width: 20%;
+	}
+
+}

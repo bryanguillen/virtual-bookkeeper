@@ -4,17 +4,22 @@
 
 .expense-field, .expenses-form-input {
  	display: block;
- }
-
+}
+ 
 .expenses-form-input {
 	border: 0.5px solid grey;
-	height: 5vh;
+	height: 6vh;
 	width: 50%;
+	padding: 15px;
+}
+
+.submit-expense-container {
+	margin-top: 20px;
 }
 
 .submit-expense {
-	border: 0;
 	height: 5vh;
+	width: 35%;
 }
 
 @media screen and (min-width: 768px) {
@@ -25,6 +30,24 @@
 	.expenses-form-input {
 		border: 0.5px solid grey;
 		height: 5vh;
-		width: 25%;
+		width: 85%;
+	}
+
+	.submit-expense {
+		width: 20%;
+	}
+
+	.expense-field {
+		display: inline-block;
+	}
+}
+
+@media screen and (max-width: 768px) {
+	.expense-input-wrapper {
+		text-align: center;
+	}
+
+	.expenses-form-input {
+		margin: 0 auto;
 	}
 }

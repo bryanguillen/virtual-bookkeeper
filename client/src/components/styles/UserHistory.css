@@ -1,3 +1,18 @@
-.get-history-link {
-	cursor: pointer;
+.history-container {
+	margin-top: 10px;
+	text-align: center;
 }
+
+.get-history, .close-history {
+	cursor: pointer;
+	font-size: 4vw;
+}
+
+@media screen and (min-width: 768px) {
+	.get-history, .close-history {
+		font-size: 2vw;
+	}	
+}
+
+
+

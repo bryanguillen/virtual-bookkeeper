@@ -10,6 +10,7 @@ export default function EditStatField (props) {
 			value={props.value}
 			onChange={props.onChange}
 			name={props.name}
+			placeholder='format - 25.00 or 32.17'
 			/>
 		</div>
 	);

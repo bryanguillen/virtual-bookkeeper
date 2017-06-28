@@ -9,9 +9,14 @@ import UserHistory from './UserHistory';
 import componentHelper from './helper/helper';
 import axios from 'axios';
 
-export default class UserHome extends React.Component {
+export default class App extends React.Component {
   constructor (props) {
     super (props);
+    this.componentDidMount = this.componentDidMount.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleEditClick = this.handleEditClick.bind(this);
+    this.saveStatEdit = this.saveStatEdit.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);    
     this.state = {
       expenseName: '',
       amount: '',
@@ -21,12 +26,10 @@ export default class UserHome extends React.Component {
       expenses: null,
       netIncome: null,
       editMode: false,
-      errorMessage: ''
+      errorMessage: '',
+      editError: false,
+      newExpenseError: false
     }
-    this.componentDidMount = this.componentDidMount.bind(this);
-    this.handleStatEdit = this.handleStatEdit.bind(this);
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount() {
@@ -63,59 +66,70 @@ export default class UserHome extends React.Component {
   handleInputChange (e) {
     this.setState({
       errorMessage: '', 
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
+      editError: false, 
+      newExpenseError: false
     });
   }
 
-  //find an easier way to validate user input
-  handleStatEdit (e) {
+  handleEditClick (e) {
     e.preventDefault();
-    let state = this.state,
-        monthAndYear = componentHelper.getMonth(),
-        formattedIncome = componentHelper.convertOnChange(state.income.slice(1)),
-        formattedGoal = componentHelper.convertOnChange(state.goal.slice(1));
-
-    if (state.editMode === true) {
-      monthAndYear = componentHelper.getMonth();
-      return axios
-      .put(`/users/594dd4d447f990bb6450622a/${monthAndYear.month}/${monthAndYear.year}`, {
-        user: '594dd4d447f990bb6450622a',
-        month: monthAndYear.month,
-        year: monthAndYear.year,
-        income: formattedIncome,
-        goal: formattedGoal 
-      })
-      .then(() => {
-        console.log('success!');
-        this.setState( prevState => ({
-          editMode: !prevState.editMode //you might want a way to take the error and display it to user
-        }))
-      })
-      .catch(err => {
-        console.log(err);
-      })
-    }
-
+    let formattedIncome = this.state.income.slice(1),
+        formattedGoal = this.state.goal.slice(1)
     this.setState(prevState => ({
-      editMode: !prevState.editMode
+      editMode: !prevState.editMode,
+      income: formattedIncome,
+      goal: formattedGoal
     }))
-
   }
 
   saveStatEdit (e) {
     e.preventDefault();
+    let monthAndYear = componentHelper.getMonth(),
+      formattedIncome = componentHelper.convertOnSubmission(this.state.income),
+      formattedGoal = componentHelper.convertOnSubmission(this.state.goal);
+    
+    if (!formattedIncome || !formattedGoal) {
+          return this.setState( prevState => ({
+                    editError: !prevState.editError,
+                    errorMessage: 'Please Include valid format.' + prevState.errorMessage 
+                  }))
+    }
+
+    axios
+      .put(`/users/5951d945431e898b88e9efd6/${monthAndYear.month}/${monthAndYear.year}`, {
+        user: '5951d945431e898b88e9efd6',
+        month: monthAndYear.month,
+        year: monthAndYear.year,
+        income: formattedIncome,
+        goal: formattedGoal
+      })
+      .then(() => {
+        this.setState( (prevState) => ({ 
+          editMode: !prevState.editMode,
+          income: componentHelper.numToStringDollar(formattedIncome),
+          netIncome: componentHelper.numToStringDollar(formattedIncome - componentHelper.amountStringToNum(prevState.expenses)),
+          goal: componentHelper.numToStringDollar(formattedGoal),
+          editError: false, 
+          errorMessage: ''
+         }))
+      })
+      .catch(err => {
+        console.log(err.message);
+      })
   }
 
   handleSubmit (e) {
     e.preventDefault();
     let state = this.state,
         monthAndYear = componentHelper.getMonth(),
-        amount = componentHelper.convertOnChange(state.amount),
+        amount = componentHelper.convertOnSubmission(state.amount),
         expenses = componentHelper.amountStringToNum(state.expenses),
         netIncome = componentHelper.amountStringToNum(state.netIncome);
 
     if (!amount) {
       return this.setState( prevState => ({
+                newExpenseError: !prevState.newExpenseError,
                 errorMessage: prevState.errorMessage + 'Please Include valid format.'
               }))
     }
@@ -133,7 +147,9 @@ export default class UserHome extends React.Component {
           expenseName: '',
           amount: '',
           expenses: componentHelper.numToStringDollar(expenses + amount),
-          netIncome: componentHelper.numToStringDollar(netIncome - amount)
+          netIncome: componentHelper.numToStringDollar(netIncome - amount),
+          newExpenseError: false, 
+          errorMessage: ''
         }))
       })
       .catch(err => {
@@ -153,8 +169,14 @@ export default class UserHome extends React.Component {
                   
                   <Greetings username={state.username} />
                   
-                  <div className="row">
+                  <div className="row financial-stats-wrapper">
                     
+                    <FinancialStat 
+                      description={'Savings Goal'} 
+                      value={state.goal}
+                      editing={state.editMode}  
+                      onChange={this.handleInputChange} name={'goal'} edible={true} />
+
                     <FinancialStat 
                       description={'Income '} 
                       value={state.income}
@@ -166,22 +188,24 @@ export default class UserHome extends React.Component {
                     
                     <FinancialStat description={'Net Income '} value={state.netIncome}/>
                     
-                    <FinancialStat 
-                      description={'Savings Goal'} 
-                      value={state.goal}
-                      editing={state.editMode}  
-                      onChange={this.handleInputChange} name={'goal'} edible={true} />
-                    
-                    <EditStatButton editing={state.editMode} onClick={this.handleStatEdit} />
-                  
+                    <ErrorMessage error={state.editError} message={state.errorMessage} />
+                  </div>
+
+                  <div className="row button-wrapper">
+                    <EditStatButton 
+                      editing={state.editMode} 
+                      editOnClick={this.handleEditClick}
+                      saveOnClick={this.saveStatEdit} />
                   </div>  
                   
                   <ExpenseForm onSubmit={this.handleSubmit} onChange={this.handleInputChange} 
                     amountFieldName={'amount'} amount={state.amount} 
                     expenseFieldName={'expenseName'} 
                     expenseName={state.expenseName} />
-                  <ErrorMessage message={state.errorMessage} />
+                  <ErrorMessage error={state.newExpenseError} message={state.errorMessage} />
+                    
                   <UserHistory />
+                
                 </div>
               </div>
           </div>

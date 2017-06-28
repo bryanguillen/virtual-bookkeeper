@@ -1,12 +1,12 @@
 import React from 'react';
-import './styles/SaveUserStats.css'
+import './styles/EditStatButton.css'
 
 export default function EditStatButton (props) {
 	if (props.editing) {
 		return (
-			<div className="col-md-3">
+			<div className="col-md-2 edit-stats-outer">
 			<div className="save-stats-container">
-				<button className="edit-stats" onClick={props.onClick}>
+				<button className="edit-stats" onClick={props.saveOnClick}>
 				    Save
 				</button>
 			</div>
@@ -15,9 +15,9 @@ export default function EditStatButton (props) {
 	}
 
 	return (
-		<div className="col-md-3">
-			<div className="save-stats-container">
-				<button data={props.field} className="save-stats" onClick={props.onClick}>
+		<div className="col-md-12 edit-stats-outer">
+			<div className="edit-stats-container">
+				<button className="save-stats" onClick={props.editOnClick}>
 				    Edit
 				</button>
 			</div>

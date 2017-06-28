@@ -1,11 +1,17 @@
 import React from 'react'; 
 
 export default function ErrorMessage (props) {
-	return (
-		<div className="row">
-			<div className="col-md-12">
-				<span>{props.message}</span>
+	if (props.error) {
+		return (
+			<div className="row">
+				<div className="col-md-12">
+					<span>{props.message}</span>
+				</div>
 			</div>
-		</div>
+		);
+	}
+
+	return (
+		<div></div>
 	);
 }
